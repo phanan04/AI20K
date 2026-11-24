@@ -265,9 +265,11 @@
                 <p class="text-[11px] text-[#777777]">Câu hỏi trích trực tiếp từ ngân hàng đề thi AI20K chuẩn</p>
               </div>
               <div id="quizScoreText" class="text-xs font-semibold text-white bg-[#222222] px-3 py-1 rounded-full border border-[#333333]">
-                0/3 hoàn thành
+                0 câu hoàn thành
               </div>
             </div>
+            <!-- Subtopic Filter Bar -->
+            <div id="quizFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1.5 text-xs"></div>
             <div id="practiceQuestionsList" class="space-y-4"></div>
           </div>
 
@@ -313,6 +315,7 @@
   <script>
     // State management
     let currentLessonIndex = 0;
+    let currentSubtopicFilter = -1; // -1 means all subtopics
     let completedLessons = JSON.parse(localStorage.getItem('ai20k_completed_lessons') || '[]');
     let quizAnswers = JSON.parse(localStorage.getItem('ai20k_quiz_answers') || '{}');
 
@@ -330,6 +333,8 @@
     const trapsList = document.getElementById('trapsList');
     const cheatSheetCards = document.getElementById('cheatSheetCards');
     const practiceQuestionsList = document.getElementById('practiceQuestionsList');
+    const quizFilterBar = document.getElementById('quizFilterBar');
+    const quizScoreText = document.getElementById('quizScoreText');
     const markCompletedBtn = document.getElementById('markCompletedBtn');
     const markCompletedText = document.getElementById('markCompletedText');
     const prevLessonBtn = document.getElementById('prevLessonBtn');
@@ -430,20 +435,25 @@
       }
 
       // Theory Sections (Threads Thread-Post Style with Connecting Line)
-      theorySections.innerHTML = lesson.sections.map((sec, sIdx) => `
+      theorySections.innerHTML = lesson.sections.map((sec, sIdx) => {
+        // Count how many questions belong to this section
+        const relevantQs = (lesson.practiceQuestions || []).filter(q => q.subtopic === sIdx);
+        const qCount = relevantQs.length;
+
+        return `
         <article class="bg-[#181818] border border-[#262626] rounded-3xl p-5 sm:p-7 space-y-5 relative shadow-sm">
           
           <!-- Post Header -->
           <div class="flex items-center justify-between border-b border-[#242424] pb-3">
             <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-full bg-[#242424] text-white flex items-center justify-center font-bold text-xs">
+              <div class="w-7 h-7 rounded-full bg-white text-black flex items-center justify-center font-bold text-xs shadow-sm">
                 ${sIdx + 1}
               </div>
               <h3 class="text-base sm:text-lg font-bold text-white tracking-tight">
                 ${sec.title}
               </h3>
             </div>
-            <span class="text-[11px] text-[#666666]">Khái niệm ${sIdx + 1}/${lesson.sections.length}</span>
+            <span class="text-[11px] text-[#777777] font-medium">Trọng tâm ${sIdx + 1}/${lesson.sections.length}</span>
           </div>
 
           <!-- Thread Node 1: Tại sao trong AI cần học? -->
@@ -460,55 +470,155 @@
             </div>
           ` : ''}
 
-          <!-- Thread Node 2: Ẩn dụ đời thường (Feynman) -->
-          ${sec.analogy ? `
-            <div class="relative pl-7 thread-node">
-              <div class="thread-line"></div>
-              <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#202020] border border-[#333333] flex items-center justify-center text-white z-10">
-                <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-300"></i>
-              </div>
-              <div class="space-y-1.5">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Hình dung đời thường (Feynman Intuition)</div>
-                <div class="text-xs sm:text-sm text-[#cccccc] leading-relaxed whitespace-pre-line bg-[#141414] p-4 rounded-2xl border border-[#222222] font-normal">
-                  ${sec.analogy}
-                </div>
-              </div>
-            </div>
-          ` : ''}
+          <!-- Rich Concepts (Viblo Interview & Feynman Style) -->
+          ${sec.concepts && sec.concepts.length ? `
+            <div class="space-y-4 pt-1">
+              ${sec.concepts.map((concept, cIdx) => `
+                <div class="bg-[#131313] border border-[#242424] rounded-2xl p-4 sm:p-5 space-y-4 hover:border-[#333333] transition-all">
+                  
+                  <!-- Concept Header -->
+                  <div class="flex items-center justify-between border-b border-[#202020] pb-2.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-5 h-5 rounded-full bg-[#242424] text-white font-bold text-[11px] flex items-center justify-center">${cIdx + 1}</span>
+                      <h4 class="text-xs sm:text-sm font-bold text-white tracking-tight">${concept.name}</h4>
+                    </div>
+                    <span class="text-[10px] uppercase font-semibold text-neutral-400 bg-[#1c1c1c] px-2 py-0.5 rounded-full border border-[#2a2a2a]">${concept.tag || 'Trọng tâm'}</span>
+                  </div>
 
-          <!-- Thread Node 3: Công thức & Bản chất toán học -->
-          ${sec.formulaBox ? `
-            <div class="relative pl-7 thread-node">
-              <div class="thread-line"></div>
-              <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#202020] border border-[#333333] flex items-center justify-center text-white z-10">
-                <i data-lucide="code-2" class="w-3.5 h-3.5 text-indigo-300"></i>
-              </div>
-              <div class="space-y-1.5">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-[#888888]">Bản chất công thức & Toán học</div>
-                <div class="text-xs sm:text-sm text-[#f0f0f0] bg-[#121212] p-4 rounded-2xl border border-[#242424] space-y-2 font-mono">
-                  ${sec.formulaBox}
-                </div>
-              </div>
-            </div>
-          ` : ''}
+                  <!-- Interview Question Box (Viblo Style) -->
+                  ${concept.interviewQuestion ? `
+                    <div class="bg-[#161616] border-l-2 border-amber-400 rounded-r-xl p-3 text-xs">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-amber-400 mb-1 flex items-center gap-1.5">
+                        <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Câu hỏi phỏng vấn AI thực chiến
+                      </div>
+                      <p class="text-neutral-200 italic font-medium leading-relaxed">${concept.interviewQuestion}</p>
+                    </div>
+                  ` : ''}
 
-          <!-- Thread Node 4: Mẹo tính nhẩm 5 giây khi thi -->
-          ${sec.quickTip ? `
-            <div class="relative pl-7 thread-node">
-              <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#182820] border border-emerald-700/60 flex items-center justify-center text-emerald-400 z-10">
-                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="space-y-1">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Mẹo tính nhẩm 5 giây khi đi thi</div>
-                <div class="text-xs sm:text-sm text-emerald-200/90 bg-[#121c16] p-3.5 rounded-2xl border border-emerald-900/40">
-                  ${sec.quickTip}
+                  <!-- Intuition / Feynman -->
+                  ${concept.intuition ? `
+                    <div class="space-y-1">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-400"></i> Bản chất & Trực giác đời thường
+                      </div>
+                      <div class="text-xs sm:text-sm text-[#cccccc] leading-relaxed whitespace-pre-line pl-1">
+                        ${concept.intuition}
+                      </div>
+                    </div>
+                  ` : ''}
+
+                  <!-- Mathematical Formula Block -->
+                  ${concept.formula ? `
+                    <div class="bg-[#0e0e0e] p-4 rounded-xl border border-[#262626] space-y-1.5">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
+                        <i data-lucide="code-2" class="w-3.5 h-3.5"></i> Công thức & Bản chất toán học
+                      </div>
+                      <div class="text-xs sm:text-sm text-neutral-100 leading-relaxed overflow-x-auto whitespace-pre-line py-1">
+                        ${concept.formula}
+                      </div>
+                    </div>
+                  ` : ''}
+
+                  <!-- Step-by-step Example -->
+                  ${concept.example ? `
+                    <div class="bg-[#121614] p-3.5 rounded-xl border border-[#1b2b20] text-xs space-y-1">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Ví dụ tính toán từng bước
+                      </div>
+                      <div class="text-[#cfdad5] leading-relaxed whitespace-pre-line font-mono text-[11px]">
+                        ${concept.example}
+                      </div>
+                    </div>
+                  ` : ''}
+
+                  <!-- AI Application -->
+                  ${concept.aiApplication ? `
+                    <div class="bg-[#14161f] p-3.5 rounded-xl border border-[#1e2438] text-xs space-y-1">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Ứng dụng trong AI & Deep Learning
+                      </div>
+                      <div class="text-[#cfd6eb] leading-relaxed whitespace-pre-line">
+                        ${concept.aiApplication}
+                      </div>
+                    </div>
+                  ` : ''}
+
+                  <!-- Quick Tip & Trap -->
+                  ${concept.quickTip ? `
+                    <div class="bg-[#1a1812] p-3 rounded-xl border border-[#38301c] text-xs flex items-start gap-2 text-amber-200/90">
+                      <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5"></i>
+                      <div><strong>Mẹo tính nhanh & Bẫy thi:</strong> ${concept.quickTip}</div>
+                    </div>
+                  ` : ''}
+
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <!-- Fallback Nodes for standard sections -->
+            ${sec.analogy ? `
+              <div class="relative pl-7 thread-node">
+                <div class="thread-line"></div>
+                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#202020] border border-[#333333] flex items-center justify-center text-white z-10">
+                  <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-300"></i>
+                </div>
+                <div class="space-y-1.5">
+                  <div class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Hình dung đời thường (Feynman Intuition)</div>
+                  <div class="text-xs sm:text-sm text-[#cccccc] leading-relaxed whitespace-pre-line bg-[#141414] p-4 rounded-2xl border border-[#222222] font-normal">
+                    ${sec.analogy}
+                  </div>
                 </div>
               </div>
+            ` : ''}
+
+            ${sec.formulaBox ? `
+              <div class="relative pl-7 thread-node">
+                <div class="thread-line"></div>
+                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#202020] border border-[#333333] flex items-center justify-center text-white z-10">
+                  <i data-lucide="code-2" class="w-3.5 h-3.5 text-indigo-300"></i>
+                </div>
+                <div class="space-y-1.5">
+                  <div class="text-[11px] font-bold uppercase tracking-wider text-[#888888]">Bản chất công thức & Toán học</div>
+                  <div class="text-xs sm:text-sm text-[#f0f0f0] bg-[#121212] p-4 rounded-2xl border border-[#242424] space-y-2 whitespace-pre-line leading-relaxed">
+                    ${sec.formulaBox}
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+
+            ${sec.quickTip ? `
+              <div class="relative pl-7 thread-node">
+                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#182820] border border-emerald-700/60 flex items-center justify-center text-emerald-400 z-10">
+                  <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Mẹo tính nhẩm 5 giây khi đi thi</div>
+                  <div class="text-xs sm:text-sm text-emerald-200/90 bg-[#121c16] p-3.5 rounded-2xl border border-emerald-900/40">
+                    ${sec.quickTip}
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+          `}
+
+          <!-- Section CTA Link to Practice Questions -->
+          ${qCount > 0 ? `
+            <div class="mt-4 pt-3.5 border-t border-[#242424] flex flex-wrap items-center justify-between gap-2.5 bg-[#141414] p-3.5 rounded-2xl border border-[#202020]">
+              <div class="text-xs text-[#888888] flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Phần này có <strong>${qCount}</strong> câu hỏi thực chiến liên quan trong đề thi</span>
+              </div>
+              <button onclick="jumpToQuizSubtopic(${sIdx})" 
+                class="px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
+                <span>Luyện ngay ${qCount} câu này</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
             </div>
           ` : ''}
 
         </article>
-      `).join('');
+      `;
+      }).join('');
 
       // Traps List
       trapsList.innerHTML = lesson.traps.map(trap => `
@@ -527,75 +637,14 @@
       cheatSheetCards.innerHTML = lesson.cheatSheet.map(item => `
         <div class="bg-[#181818] border border-[#282828] rounded-xl p-3.5 flex items-center justify-between hover:border-[#383838] transition">
           <span class="text-xs text-[#e0e0e0] font-mono">${item}</span>
-          <button onclick="copyToClipboard('${item.replace(/'/g, "\\'")}')" class="text-[#666666] hover:text-white p-1" title="Sao chép">
+          <button onclick="copyToClipboard('${item.replace(/'/g, "\'")}')" class="text-[#666666] hover:text-white p-1" title="Sao chép">
             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
           </button>
         </div>
       `).join('');
 
-      // Practice Questions
-      practiceQuestionsList.innerHTML = lesson.practiceQuestions.map((q, qIdx) => {
-        const storedAns = quizAnswers[q.id];
-        return `
-          <div class="bg-[#181818] border border-[#282828] rounded-2xl p-5 space-y-3.5" id="quizCard-${q.id}">
-            <div class="flex items-center justify-between text-xs text-[#777777] border-b border-[#242424] pb-2">
-              <span class="font-semibold text-white">Câu ${qIdx + 1} (${q.type === 'mcq' ? 'Trắc nghiệm' : 'Điền số'})</span>
-              <span class="text-[#666666] text-[11px]">${q.tags || ''}</span>
-            </div>
-            <div class="text-xs sm:text-sm font-medium text-white leading-relaxed">${q.prompt}</div>
-
-            ${q.options && q.options.length ? `
-              <div class="space-y-1.5 pt-1">
-                ${q.options.map((opt, oIdx) => {
-                  const optLetter = String.fromCharCode(65 + oIdx);
-                  const isSelected = storedAns === optLetter;
-                  const isCorrect = q.answer === optLetter;
-                  let optClass = 'border-[#262626] bg-[#121212] hover:bg-[#202020] text-[#cccccc]';
-                  
-                  if (storedAns) {
-                    if (isCorrect) optClass = 'border-emerald-600 bg-emerald-950/40 text-emerald-200 font-semibold';
-                    else if (isSelected) optClass = 'border-red-600 bg-red-950/40 text-red-200';
-                  }
-
-                  return `
-                    <button onclick="handleAnswer('${q.id}', '${optLetter}', '${q.answer}')" 
-                      class="w-full text-left p-2.5 rounded-xl border text-xs flex items-center justify-between transition-all ${optClass}">
-                      <div class="flex items-center gap-2.5">
-                        <span class="w-5 h-5 rounded-full bg-[#202020] flex items-center justify-center font-bold text-[10px] text-white shrink-0">${optLetter}</span>
-                        <span>${opt}</span>
-                      </div>
-                      ${storedAns ? (isCorrect ? '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>' : (isSelected ? '<i data-lucide="x" class="w-3.5 h-3.5 text-red-400"></i>' : '')) : ''}
-                    </button>
-                  `;
-                }).join('')}
-              </div>
-            ` : `
-              <div class="pt-1">
-                <button onclick="toggleExplanation('${q.id}')" class="text-xs text-neutral-300 hover:text-white flex items-center gap-1 underline">
-                  <i data-lucide="eye" class="w-3 h-3"></i> Xem lời giải chi tiết
-                </button>
-              </div>
-            `}
-
-            <!-- Explanation Box -->
-            <div id="expl-${q.id}" class="${storedAns ? '' : 'hidden'} mt-3 p-3.5 rounded-xl bg-[#121212] border border-[#242424] text-xs space-y-2">
-              <div class="font-bold text-emerald-400 flex items-center gap-1.5">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Đáp án đúng: ${q.answer}
-              </div>
-              <div class="text-[#cccccc] leading-relaxed">${q.explanation || ''}</div>
-              ${q.distractors ? `
-                <div class="pt-2 border-t border-[#242424] text-[#888888] text-[11px]">
-                  <strong class="text-amber-400">Phân tích bẫy sai:</strong>
-                  <ul class="list-disc pl-4 mt-1 space-y-0.5">
-                    ${Object.entries(q.distractors).map(([k, v]) => `<li><strong>${k}:</strong> ${v}</li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-            </div>
-
-          </div>
-        `;
-      }).join('');
+      // Render Quiz dynamically with current subtopic filter
+      renderQuiz();
 
       // Prev / Next Navigation buttons
       if (index > 0) {
@@ -649,18 +698,282 @@
       loadLesson(currentLessonIndex);
     });
 
-    // Answer Quiz Question
+    // Render Quiz with Subtopic Filter
+    function renderQuiz() {
+      const lesson = COURSE_DATA[currentLessonIndex];
+      if (!lesson) return;
+      const allQs = lesson.practiceQuestions || [];
+
+      // 1. Render Subtopic Filter Pills
+      let filterHtml = `
+        <button onclick="setQuizFilter(-1)" class="px-3 py-1 rounded-full text-xs font-medium shrink-0 transition ${
+          currentSubtopicFilter === -1 
+            ? 'bg-white text-black font-semibold' 
+            : 'bg-[#181818] text-[#888888] hover:text-white border border-[#262626]'
+        }">
+          Tất cả (${allQs.length})
+        </button>
+      `;
+
+      lesson.sections.forEach((sec, sIdx) => {
+        const count = allQs.filter(q => q.subtopic === sIdx).length;
+        if (count > 0) {
+          const shortTitle = sec.title.split('—')[0].replace(/^\d+\.\s*/, '').trim();
+          const isActive = currentSubtopicFilter === sIdx;
+          filterHtml += `
+            <button onclick="setQuizFilter(${sIdx})" class="px-3 py-1 rounded-full text-xs font-medium shrink-0 transition flex items-center gap-1.5 ${
+              isActive 
+                ? 'bg-white text-black font-semibold' 
+                : 'bg-[#181818] text-[#888888] hover:text-white border border-[#262626]'
+            }">
+              <span>${sIdx + 1}. ${shortTitle}</span>
+              <span class="px-1.5 py-0.2 rounded-full text-[10px] ${isActive ? 'bg-neutral-200 text-black' : 'bg-[#222] text-[#777]'}">${count}</span>
+            </button>
+          `;
+        }
+      });
+      quizFilterBar.innerHTML = filterHtml;
+
+      // 2. Filter questions to show
+      const qsToRender = currentSubtopicFilter === -1 
+        ? allQs 
+        : allQs.filter(q => q.subtopic === currentSubtopicFilter);
+
+      // 3. Update Progress Count
+      const answeredCount = qsToRender.filter(q => quizAnswers[q.id] !== undefined).length;
+      quizScoreText.innerText = `${answeredCount}/${qsToRender.length} câu hoàn thành`;
+
+      // 4. Render Question Cards
+      practiceQuestionsList.innerHTML = qsToRender.map((q, qIdx) => {
+        const storedAns = quizAnswers[q.id];
+        const isAnswered = storedAns !== undefined;
+
+        // Type badge label
+        let typeLabel = 'Trắc nghiệm';
+        if (q.type === 'numeric') typeLabel = 'Điền số';
+        else if (q.type === 'essay') typeLabel = 'Tự luận';
+
+        return `
+          <div class="bg-[#181818] border border-[#282828] rounded-2xl p-5 space-y-3.5 shadow-sm" id="quizCard-${q.id}">
+            <div class="flex items-center justify-between text-xs text-[#777777] border-b border-[#242424] pb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-[#242424] text-white flex items-center justify-center font-bold text-[10px]">${qIdx + 1}</span>
+                <span class="font-bold text-white">${q.id}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#202020] text-neutral-300 border border-[#2e2e2e]">${typeLabel}</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-[11px] text-[#666666]">
+                ${(q.tags || []).slice(0, 2).map(t => `<span class="bg-[#141414] px-2 py-0.5 rounded-md border border-[#222]">${t}</span>`).join('')}
+              </div>
+            </div>
+
+            <!-- Prompt -->
+            <div class="text-xs sm:text-sm font-medium text-white leading-relaxed">${q.prompt}</div>
+
+            <!-- MCQ Options -->
+            ${q.options && q.options.length ? `
+              <div class="space-y-1.5 pt-1">
+                ${q.options.map((opt, oIdx) => {
+                  const optLetter = (typeof opt === 'object' && opt !== null) ? (opt.key || String.fromCharCode(65 + oIdx)) : String.fromCharCode(65 + oIdx);
+                  const optText = (typeof opt === 'object' && opt !== null) ? (opt.text || opt.key) : opt;
+                  const isSelected = storedAns === optLetter;
+                  const isCorrect = q.answer === optLetter;
+                  let optClass = 'border-[#262626] bg-[#121212] hover:bg-[#202020] text-[#cccccc]';
+                  
+                  if (isAnswered) {
+                    if (isCorrect) optClass = 'border-emerald-600 bg-emerald-950/40 text-emerald-200 font-semibold';
+                    else if (isSelected) optClass = 'border-red-600 bg-red-950/40 text-red-200';
+                    else optClass = 'border-[#202020] bg-[#101010] text-[#555555] opacity-60';
+                  }
+
+                  return `
+                    <button onclick="handleAnswer('${q.id}', '${optLetter}', '${q.answer}')" 
+                      class="w-full text-left p-2.5 sm:p-3 rounded-xl border text-xs sm:text-sm flex items-center justify-between transition-all ${optClass}">
+                      <div class="flex items-center gap-2.5">
+                        <span class="w-5 h-5 rounded-full bg-[#202020] flex items-center justify-center font-bold text-[10px] text-white shrink-0">${optLetter}</span>
+                        <span>${optText}</span>
+                      </div>
+                      ${isAnswered ? (isCorrect ? '<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>' : (isSelected ? '<i data-lucide="x" class="w-4 h-4 text-red-400"></i>' : '')) : ''}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
+
+            <!-- Numeric Input -->
+            ${q.type === 'numeric' ? `
+              <div class="pt-1.5 space-y-2">
+                <div class="flex items-center gap-2">
+                  <input type="text" id="num-input-${q.id}" placeholder="Nhập kết quả số..." 
+                    value="${storedAns !== undefined ? storedAns : ''}"
+                    class="bg-[#121212] border border-[#2e2e2e] rounded-xl px-3.5 py-2 text-xs sm:text-sm text-white placeholder-[#555] focus:outline-none focus:border-white w-44 font-mono">
+                  <button onclick="handleNumericAnswer('${q.id}', ${q.value}, ${q.tol || 0.05})"
+                    class="px-4 py-2 rounded-xl bg-white text-black font-semibold text-xs hover:bg-neutral-200 transition shadow-sm">
+                    Kiểm tra
+                  </button>
+                  ${isAnswered ? `
+                    <span class="text-xs font-semibold flex items-center gap-1 ${
+                      Math.abs(parseFloat(storedAns) - parseFloat(q.value)) <= (q.tol || 0.05) 
+                        ? 'text-emerald-400' 
+                        : 'text-red-400'
+                    }">
+                      <i data-lucide="${Math.abs(parseFloat(storedAns) - parseFloat(q.value)) <= (q.tol || 0.05) ? 'check' : 'x'}" class="w-3.5 h-3.5"></i>
+                      ${Math.abs(parseFloat(storedAns) - parseFloat(q.value)) <= (q.tol || 0.05) ? 'Chính xác' : 'Đáp án chuẩn: ' + q.value}
+                    </span>
+                  ` : ''}
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- Essay Prompt Action -->
+            ${q.type === 'essay' ? `
+              <div class="pt-1">
+                <button onclick="toggleExplanation('${q.id}')" class="px-3.5 py-1.5 rounded-xl bg-[#202020] hover:bg-[#282828] text-white border border-[#333333] text-xs font-medium flex items-center gap-1.5 transition">
+                  <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>Xem gợi ý giải & Rubric chấm điểm</span>
+                </button>
+              </div>
+            ` : ''}
+
+            <!-- Explanation & Details Box -->
+            <div id="expl-${q.id}" class="${isAnswered ? '' : 'hidden'} mt-3 p-4 rounded-2xl bg-[#121212] border border-[#242424] text-xs space-y-2.5">
+              <div class="font-bold text-emerald-400 flex items-center gap-1.5 text-xs sm:text-sm">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i> 
+                Đáp án đúng: <span class="text-white font-mono">${q.answer || q.value || 'Xem bài giải mẫu bên dưới'}</span>
+              </div>
+              <div class="text-[#cccccc] leading-relaxed whitespace-pre-line text-xs sm:text-sm">${q.explanation || ''}</div>
+              
+              <!-- Distractor Traps Analysis -->
+              ${q.distractors ? `
+                <div class="pt-2.5 border-t border-[#242424] text-[#888888] text-[11px] space-y-1">
+                  <strong class="text-amber-400 uppercase tracking-wider text-[10px]">Phân tích bẫy đề thi:</strong>
+                  <ul class="list-disc pl-4 space-y-1 mt-1 text-[#aaaaaa]">
+                    ${Object.entries(q.distractors).map(([k, v]) => `<li><strong class="text-neutral-200">${k}:</strong> ${v}</li>`).join('')}
+                  </ul>
+                </div>
+              ` : ''}
+
+              <!-- Mistakes Analysis for Numeric -->
+              ${q.mistakes ? `
+                <div class="pt-2.5 border-t border-[#242424] text-[#888888] text-[11px] space-y-1">
+                  <strong class="text-amber-400 uppercase tracking-wider text-[10px]">Lỗi nhẩm sai thường gặp:</strong>
+                  <ul class="list-disc pl-4 space-y-1 mt-1 text-[#aaaaaa]">
+                    ${Object.entries(q.mistakes).map(([k, v]) => `<li><strong class="text-neutral-200">${k}:</strong> ${v}</li>`).join('')}
+                  </ul>
+                </div>
+              ` : ''}
+
+              <!-- Essay Rubric -->
+              ${q.rubric ? `
+                <div class="pt-2.5 border-t border-[#242424] text-[11px] space-y-1.5">
+                  <strong class="text-indigo-400 uppercase tracking-wider text-[10px]">Tiêu chí chấm điểm (Rubric):</strong>
+                  <div class="space-y-1">
+                    ${q.rubric.map(r => `
+                      <div class="flex items-start justify-between bg-[#181818] p-2 rounded-lg border border-[#262626]">
+                        <span class="text-[#cccccc]">${r.criterion}</span>
+                        <span class="font-bold text-indigo-300 ml-2 shrink-0">${r.points}đ</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+
+              <!-- Essay Model Answer -->
+              ${q.model_answer ? `
+                <div class="pt-2.5 border-t border-[#242424] text-[11px] space-y-1">
+                  <strong class="text-emerald-400 uppercase tracking-wider text-[10px]">Bài giải mẫu chuẩn:</strong>
+                  <div class="text-[#cccccc] bg-[#161616] p-3 rounded-xl border border-[#262626] whitespace-pre-line leading-relaxed">
+                    ${q.model_answer}
+                  </div>
+                </div>
+              ` : ''}
+
+              <!-- Deep Dive / Long Breakdown -->
+              ${q.long ? `
+                <div class="pt-2 border-t border-[#242424]">
+                  <button onclick="toggleDeepDive('${q.id}')" class="text-[11px] text-neutral-400 hover:text-white flex items-center gap-1">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span>Xem phân tích chuyên sâu & Sơ đồ minh họa</span>
+                  </button>
+                  <div id="deep-${q.id}" class="hidden mt-2 p-3.5 rounded-xl bg-[#161616] border border-[#282828] text-xs text-[#cccccc] space-y-2 whitespace-pre-line leading-relaxed">
+                    ${q.long}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      // Re-render KaTeX in quiz container
+      renderMathInElement(practiceQuestionsList, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
+      });
+      lucide.createIcons();
+    }
+
+    // Filter Quiz by Subtopic
+    window.setQuizFilter = function(sIdx) {
+      currentSubtopicFilter = sIdx;
+      renderQuiz();
+    };
+
+    // Jump from Theory section CTA to Quiz Subtopic
+    window.jumpToQuizSubtopic = function(sIdx) {
+      currentSubtopicFilter = sIdx;
+      // Switch active tab to Quiz
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active', 'border-white', 'text-white');
+        b.classList.add('border-transparent', 'text-[#777777]');
+      });
+      const quizBtn = document.querySelector('.tab-btn[data-tab="quiz"]');
+      if (quizBtn) {
+        quizBtn.classList.add('active', 'border-white', 'text-white');
+        quizBtn.classList.remove('border-transparent', 'text-[#777777]');
+      }
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+      document.getElementById('tabContent-quiz').classList.remove('hidden');
+
+      renderQuiz();
+      document.getElementById('tabContent-quiz').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Answer MCQ Question
     window.handleAnswer = function(qId, choice, correct) {
       quizAnswers[qId] = choice;
       localStorage.setItem('ai20k_quiz_answers', JSON.stringify(quizAnswers));
       if (choice === correct) {
-        confetti({ particleCount: 30, spread: 40 });
+        confetti({ particleCount: 35, spread: 45 });
       }
-      loadLesson(currentLessonIndex);
+      renderQuiz();
+    };
+
+    // Answer Numeric Question
+    window.handleNumericAnswer = function(qId, correctVal, tol) {
+      const inputEl = document.getElementById(`num-input-${qId}`);
+      if (!inputEl) return;
+      const valStr = inputEl.value.trim().replace(',', '.');
+      if (!valStr) return;
+      const userVal = parseFloat(valStr);
+      quizAnswers[qId] = userVal;
+      localStorage.setItem('ai20k_quiz_answers', JSON.stringify(quizAnswers));
+      if (Math.abs(userVal - correctVal) <= (tol || 0.05)) {
+        confetti({ particleCount: 40, spread: 50 });
+      }
+      renderQuiz();
     };
 
     window.toggleExplanation = function(qId) {
       const el = document.getElementById(`expl-${qId}`);
+      if (el) el.classList.toggle('hidden');
+    };
+
+    window.toggleDeepDive = function(qId) {
+      const el = document.getElementById(`deep-${qId}`);
       if (el) el.classList.toggle('hidden');
     };
 
