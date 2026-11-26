@@ -26,10 +26,22 @@
     }
   </script>
 
-  <!-- KaTeX for Math rendering -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- MathJax Configuration (Bảo đảm biên dịch 100% công thức toán học) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      startup: { typeset: false }
+    };
+  </script>
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -49,8 +61,11 @@
     ::-webkit-scrollbar-thumb { background: #282828; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #444444; }
 
-    .katex {
-      font-size: 1.05em;
+    mjx-container {
+      display: inline-grid !important;
+      margin: 0 2px !important;
+      vertical-align: middle !important;
+      color: #f3f5f7 !important;
     }
 
     .circle-bullet::before {
@@ -174,6 +189,14 @@
       lucide.createIcons();
     }
 
+    function triggerMathTypeset(el) {
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([el]).catch(err => console.log('MathJax error:', err));
+      } else {
+        setTimeout(() => triggerMathTypeset(el), 80);
+      }
+    }
+
     function loadTopic(idx) {
       currentTopicIndex = idx;
       const topic = TOPICS[idx];
@@ -236,14 +259,8 @@
 
       recallContainer.innerHTML = html;
 
-      // Render KaTeX
-      renderMathInElement(recallContainer, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false }
-        ],
-        throwOnError: false
-      });
+      // Trigger MathJax typeset
+      triggerMathTypeset(recallContainer);
 
       renderSidebar();
       lucide.createIcons();
