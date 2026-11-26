@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI20K Learning Portal — Cổng Ôn Luyện ĐGNL AI Thực Chiến</title>
+  <title>AI20K Fast Recall — Sổ Tay Rút Gọn Cực Ngắn 12 Chuyên Đề</title>
   
   <!-- Inter Font (Threads Typography) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,19 +20,6 @@
           fontFamily: {
             sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace']
-          },
-          colors: {
-            thread: {
-              bg: '#101010',
-              surface: '#181818',
-              surfaceHover: '#202020',
-              border: '#282828',
-              borderSubtle: '#222222',
-              text: '#f3f5f7',
-              muted: '#777777',
-              dim: '#555555',
-              accent: '#ffffff'
-            }
           }
         }
       }
@@ -47,55 +34,38 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Canvas Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
   <style>
-    /* Threads aesthetics */
     body {
       background-color: #101010;
       color: #f3f5f7;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      letter-spacing: -0.011em;
+      letter-spacing: -0.01em;
     }
 
-    /* Custom subtle scrollbar */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #2e2e2e; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: #282828; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #444444; }
-
-    /* Thread vertical connector lines */
-    .thread-line {
-      position: absolute;
-      top: 36px;
-      bottom: -16px;
-      left: 17px;
-      width: 2px;
-      background-color: #282828;
-      z-index: 0;
-    }
-
-    .thread-node:last-child .thread-line {
-      display: none;
-    }
-
-    pre code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.84rem;
-      line-height: 1.6;
-    }
 
     .katex {
       font-size: 1.05em;
+    }
+
+    .circle-bullet::before {
+      content: '○';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #777777;
+      font-size: 0.95em;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-neutral-800 selection:text-white">
 
-  <!-- TOP NAVBAR (Threads Style) -->
+  <!-- TOP NAVBAR -->
   <header class="sticky top-0 z-40 bg-[#101010]/95 backdrop-blur-md border-b border-[#222222] px-4 lg:px-8 py-3 flex items-center justify-between">
     <div class="flex items-center space-x-3">
       <button id="mobileSidebarBtn" class="lg:hidden p-2 rounded-xl bg-[#181818] hover:bg-[#222222] text-[#f3f5f7] border border-[#282828] transition">
@@ -108,32 +78,17 @@
           @
         </div>
         <div>
-          <span class="font-bold text-base tracking-tight text-white">AI20K Learning Hub</span>
-          <span class="hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 ml-2 rounded-full bg-[#1e1e1e] text-[#888888] border border-[#2c2c2c]">Chuẩn SFIA L3–L4</span>
+          <span class="font-bold text-base tracking-tight text-white">AI20K Fast Recall</span>
+          <span class="hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 ml-2 rounded-full bg-[#1e1e1e] text-[#888888] border border-[#2c2c2c]">Bản rút gọn thi trắc nghiệm</span>
         </div>
       </div>
     </div>
 
-    <!-- Center Search Bar (Minimalist Threads Style) -->
-    <div class="relative hidden md:block max-w-sm w-full mx-4">
-      <i data-lucide="search" class="w-4 h-4 text-[#777777] absolute left-3.5 top-2.5"></i>
-      <input id="searchInput" type="text" placeholder="Tìm kiếm công thức, chuyên đề... (Ctrl+K)" 
-        class="w-full bg-[#181818] border border-[#262626] rounded-full pl-9 pr-4 py-1.5 text-xs text-[#f3f5f7] placeholder-[#666666] focus:outline-none focus:border-[#444444] transition-all">
-    </div>
-
-    <!-- Right Actions -->
-    <div class="flex items-center space-x-2.5">
-      <!-- Progress Pill -->
-      <div class="hidden sm:flex items-center space-x-2 bg-[#181818] border border-[#262626] px-3 py-1 rounded-full text-xs">
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        <span class="text-[#888888]">Tiến độ:</span>
-        <span id="overallProgressText" class="font-semibold text-white">0/13</span>
-      </div>
-
-      <!-- Quick Link to Original Exam Prep -->
-      <a href="index.html" target="_blank" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-semibold transition shadow-sm">
+    <!-- Quick Link to Original Exam Prep -->
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-semibold transition shadow-sm">
         <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-        <span>Phòng thi thử</span>
+        <span>Phòng thi trắc nghiệm</span>
       </a>
     </div>
   </header>
@@ -141,150 +96,27 @@
   <!-- MAIN APP CONTAINER -->
   <div class="flex-1 flex overflow-hidden">
     
-    <!-- LEFT SIDEBAR (Threads Style) -->
+    <!-- LEFT SIDEBAR -->
     <aside id="sidebar" class="w-72 bg-[#101010] border-r border-[#222222] flex flex-col shrink-0 fixed lg:static inset-y-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out mt-[53px] lg:mt-0">
       <div class="p-4 border-b border-[#222222]">
-        <div class="flex justify-between items-center text-[11px] text-[#777777] font-semibold tracking-wider uppercase mb-2">
-          <span>Lộ trình bài học</span>
-          <span id="completedBadge" class="text-white font-bold">0%</span>
-        </div>
-        <!-- Progress bar -->
-        <div class="w-full h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
-          <div id="progressBar" class="h-full bg-white transition-all duration-300" style="width: 0%"></div>
+        <div class="text-[11px] text-[#777777] font-semibold tracking-wider uppercase">
+          Danh mục chuyên đề
         </div>
       </div>
 
       <!-- Nav Menu list -->
-      <div id="sidebarNav" class="flex-1 overflow-y-auto p-2.5 space-y-5">
+      <div id="sidebarNav" class="flex-1 overflow-y-auto p-2.5 space-y-1">
         <!-- Rendered dynamically by JS -->
-      </div>
-
-      <!-- Sidebar Footer -->
-      <div class="p-3 border-t border-[#222222] bg-[#121212] flex items-center justify-between text-xs text-[#777777]">
-        <button id="btnCheatSheetAll" class="flex items-center space-x-1.5 hover:text-white transition">
-          <i data-lucide="bookmark" class="w-3.5 h-3.5"></i>
-          <span>Sổ tay công thức</span>
-        </button>
-        <button id="btnResetProgress" class="hover:text-red-400 transition" title="Xóa tiến độ học">
-          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-        </button>
       </div>
     </aside>
 
     <!-- CONTENT AREA -->
-    <main class="flex-1 overflow-y-auto bg-[#101010] p-4 sm:p-6 lg:p-8 flex justify-center">
+    <main class="flex-1 overflow-y-auto bg-[#101010] p-4 sm:p-6 lg:p-10 flex justify-center">
       <div class="max-w-3xl w-full">
 
-        <!-- Search Result Box -->
-        <div id="searchResultsBox" class="hidden mb-6 bg-[#181818] border border-[#282828] rounded-2xl p-4 shadow-2xl">
-          <div class="flex items-center justify-between mb-3 border-b border-[#262626] pb-2">
-            <h3 class="text-xs font-semibold text-[#888888] flex items-center gap-1.5">
-              <i data-lucide="search" class="w-3.5 h-3.5 text-white"></i>
-              Kết quả tìm kiếm cho: <span id="searchQueryText" class="text-white font-bold"></span>
-            </h3>
-            <button id="closeSearchBtn" class="text-[#777777] hover:text-white text-xs">Đóng</button>
-          </div>
-          <div id="searchResultsList" class="space-y-2 max-h-60 overflow-y-auto"></div>
-        </div>
-
-        <!-- LESSON CONTAINER -->
-        <div id="lessonContainer" class="space-y-6">
-          
-          <!-- Lesson Header Post (Threads Profile Card Style) -->
-          <div class="bg-[#181818] border border-[#262626] rounded-3xl p-6 sm:p-7 shadow-lg relative">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-              <div class="flex items-center gap-2">
-                <span id="lessonBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#222222] text-[#cccccc] border border-[#303030]">CĐ-01</span>
-                <span id="lessonDuration" class="text-xs text-[#777777]">45 phút học</span>
-              </div>
-              <button id="markCompletedBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-[#333333] bg-[#202020] hover:bg-[#282828] text-white transition-all">
-                <i data-lucide="check" class="w-3.5 h-3.5"></i>
-                <span id="markCompletedText">Đánh dấu đã học</span>
-              </button>
-            </div>
-
-            <h1 id="lessonTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">Đại số tuyến tính cho AI</h1>
-            <p id="lessonSummary" class="text-[#a0a0a0] text-sm leading-relaxed mb-5"></p>
-
-            <!-- Learning Goals (Clean Accordion/Box) -->
-            <div class="bg-[#121212] border border-[#222222] rounded-2xl p-4">
-              <h4 class="text-[11px] font-bold uppercase tracking-wider text-[#888888] mb-2.5 flex items-center gap-1.5">
-                <i data-lucide="target" class="w-3.5 h-3.5 text-white"></i>
-                Mục tiêu trọng tâm cần làm chủ
-              </h4>
-              <ul id="lessonGoalsList" class="grid sm:grid-cols-2 gap-2 text-xs text-[#cccccc]"></ul>
-            </div>
-          </div>
-
-          <!-- TABS NAVIGATION (Threads Minimalist Underline Style) -->
-          <div class="flex border-b border-[#222222] space-x-1 sm:space-x-3 overflow-x-auto text-xs sm:text-sm">
-            <button class="tab-btn active px-3.5 py-2.5 font-semibold border-b-2 border-white text-white flex items-center gap-1.5 transition" data-tab="theory">
-              <i data-lucide="align-left" class="w-4 h-4"></i>
-              Bài giảng (Feynman)
-            </button>
-            <button class="tab-btn px-3.5 py-2.5 font-medium border-b-2 border-transparent text-[#777777] hover:text-white flex items-center gap-1.5 transition" data-tab="traps">
-              <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
-              Sổ tay Bẫy đề thi
-            </button>
-            <button class="tab-btn px-3.5 py-2.5 font-medium border-b-2 border-transparent text-[#777777] hover:text-white flex items-center gap-1.5 transition" data-tab="cheatsheet">
-              <i data-lucide="zap" class="w-4 h-4 text-yellow-400"></i>
-              Công thức nhớ nhanh
-            </button>
-            <button class="tab-btn px-3.5 py-2.5 font-medium border-b-2 border-transparent text-[#777777] hover:text-white flex items-center gap-1.5 transition" data-tab="quiz">
-              <i data-lucide="help-circle" class="w-4 h-4 text-emerald-400"></i>
-              Luyện trắc nghiệm test
-            </button>
-          </div>
-
-          <!-- TAB CONTENT: THEORY (Threads Feed Style) -->
-          <div id="tabContent-theory" class="tab-pane space-y-6">
-            <div id="theorySections" class="space-y-6"></div>
-          </div>
-
-          <!-- TAB CONTENT: TRAPS -->
-          <div id="tabContent-traps" class="tab-pane hidden space-y-3.5">
-            <div class="p-4 rounded-2xl bg-[#181818] border border-[#282828] text-xs text-[#a0a0a0] flex items-start gap-3">
-              <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
-              <div>
-                <strong class="text-white">Lưu ý bẫy từ người ra đề:</strong> Đề thi thường cố tình gài các phương án nhiễu đánh trúng vào các ngộ nhận dưới đây. Hãy đọc thật kỹ trước khi vào phòng thi!
-              </div>
-            </div>
-            <div id="trapsList" class="space-y-3"></div>
-          </div>
-
-          <!-- TAB CONTENT: CHEAT SHEET -->
-          <div id="tabContent-cheatsheet" class="tab-pane hidden space-y-3">
-            <div id="cheatSheetCards" class="space-y-4"></div>
-          </div>
-
-          <!-- TAB CONTENT: QUIZ -->
-          <div id="tabContent-quiz" class="tab-pane hidden space-y-5">
-            <div class="flex items-center justify-between p-4 bg-[#181818] border border-[#282828] rounded-2xl">
-              <div>
-                <h3 class="text-xs sm:text-sm font-bold text-white">Kiểm tra kiến thức nhanh</h3>
-                <p class="text-[11px] text-[#777777]">Câu hỏi trích trực tiếp từ ngân hàng đề thi AI20K chuẩn</p>
-              </div>
-              <div id="quizScoreText" class="text-xs font-semibold text-white bg-[#222222] px-3 py-1 rounded-full border border-[#333333]">
-                0 câu hoàn thành
-              </div>
-            </div>
-            <!-- Subtopic Filter Bar -->
-            <div id="quizFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1.5 text-xs"></div>
-            <div id="practiceQuestionsList" class="space-y-4"></div>
-          </div>
-
-          <!-- BOTTOM NAVIGATION BUTTONS -->
-          <div class="flex items-center justify-between pt-6 border-t border-[#222222]">
-            <button id="prevLessonBtn" class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#181818] hover:bg-[#222222] border border-[#282828] text-[#cccccc] text-xs font-medium transition">
-              <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
-              <span id="prevLessonTitle">Bài trước</span>
-            </button>
-            <button id="nextLessonBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-semibold transition shadow-md">
-              <span id="nextLessonTitle">Bài tiếp theo</span>
-              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-
+        <!-- Container for Ultra-Fast Recall Content -->
+        <div id="recallContainer" class="space-y-6">
+          <!-- Rendered dynamically -->
         </div>
 
       </div>
@@ -292,893 +124,139 @@
 
   </div>
 
-  <!-- ALL FORMULAS MODAL (Threads Modal Style) -->
-  <div id="cheatModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-[#181818] border border-[#2c2c2c] rounded-3xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-2xl">
-      <div class="p-5 border-b border-[#262626] flex items-center justify-between">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-          <i data-lucide="bookmark" class="w-4 h-4 text-white"></i>
-          Sổ tay Công thức Toàn tập AI20K
-        </h3>
-        <button id="closeCheatModal" class="text-[#777777] hover:text-white p-1 rounded-full">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-      <div id="allCheatsContent" class="p-5 overflow-y-auto space-y-5 text-xs"></div>
-    </div>
-  </div>
-
-  <!-- Load Course Data -->
-  <script src="course-data.js"></script>
+  <!-- Load Quick Summary Data -->
   <script src="quick-summary-data.js"></script>
 
-  <!-- APP CONTROLLER SCRIPT (Threads Styled) -->
   <script>
-    // State management
-    let currentLessonIndex = 0;
-    let currentSubtopicFilter = -1; // -1 means all subtopics
-    let completedLessons = JSON.parse(localStorage.getItem('ai20k_completed_lessons') || '[]');
-    let quizAnswers = JSON.parse(localStorage.getItem('ai20k_quiz_answers') || '{}');
+    const TOPICS = [
+      { id: 'cd01', code: 'CĐ-01', title: 'Đại số tuyến tính' },
+      { id: 'cd02', code: 'CĐ-02', title: 'Giải tích & Tối ưu hoá' },
+      { id: 'cd03', code: 'CĐ-03', title: 'Xác suất & Biến ngẫu nhiên' },
+      { id: 'cd04', code: 'CĐ-04', title: 'Thống kê & Thử nghiệm A/B' },
+      { id: 'cd05', code: 'CĐ-05', title: 'Lập trình Python chuyên sâu' },
+      { id: 'cd06', code: 'CĐ-06', title: 'Xử lý dữ liệu với pandas' },
+      { id: 'cd07', code: 'CĐ-07', title: 'NumPy & Độ phức tạp Big-O' },
+      { id: 'cd08', code: 'CĐ-08', title: 'SQL cho Phân tích dữ liệu' },
+      { id: 'cd09', code: 'CĐ-09', title: 'Học máy & Đánh giá mô hình' },
+      { id: 'cd10', code: 'CĐ-10', title: 'LLM, RAG & AI Agent' },
+      { id: 'cd11', code: 'CĐ-11', title: 'MLOps & Vận hành mô hình' },
+      { id: 'cd12', code: 'CĐ-12', title: 'Logic hình thức & Pháp lý AI' },
+      { id: 'tonghop', code: 'TỔNG HỢP', title: 'Chiến thuật thi ĐGNL 90 phút' }
+    ];
 
-    // DOM Elements
+    let currentTopicIndex = 0;
+
     const sidebarNav = document.getElementById('sidebarNav');
-    const progressBar = document.getElementById('progressBar');
-    const completedBadge = document.getElementById('completedBadge');
-    const overallProgressText = document.getElementById('overallProgressText');
-    const lessonBadge = document.getElementById('lessonBadge');
-    const lessonDuration = document.getElementById('lessonDuration');
-    const lessonTitle = document.getElementById('lessonTitle');
-    const lessonSummary = document.getElementById('lessonSummary');
-    const lessonGoalsList = document.getElementById('lessonGoalsList');
-    const theorySections = document.getElementById('theorySections');
-    const trapsList = document.getElementById('trapsList');
-    const cheatSheetCards = document.getElementById('cheatSheetCards');
-    const practiceQuestionsList = document.getElementById('practiceQuestionsList');
-    const quizFilterBar = document.getElementById('quizFilterBar');
-    const quizScoreText = document.getElementById('quizScoreText');
-    const markCompletedBtn = document.getElementById('markCompletedBtn');
-    const markCompletedText = document.getElementById('markCompletedText');
-    const prevLessonBtn = document.getElementById('prevLessonBtn');
-    const nextLessonBtn = document.getElementById('nextLessonBtn');
-    const prevLessonTitle = document.getElementById('prevLessonTitle');
-    const nextLessonTitle = document.getElementById('nextLessonTitle');
+    const recallContainer = document.getElementById('recallContainer');
 
     // Sidebar Mobile Toggle
     document.getElementById('mobileSidebarBtn').addEventListener('click', () => {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
     });
 
-    // Render Sidebar Navigation
     function renderSidebar() {
-      const groups = {};
-      COURSE_DATA.forEach((lesson, idx) => {
-        if (!groups[lesson.groupName]) groups[lesson.groupName] = [];
-        groups[lesson.groupName].push({ ...lesson, originalIndex: idx });
-      });
-
-      let html = '';
-      for (const [groupName, lessons] of Object.entries(groups)) {
-        html += `
-          <div>
-            <div class="text-[10px] font-bold uppercase tracking-wider text-[#666666] mb-1.5 px-2 flex items-center justify-between">
-              <span>${groupName}</span>
-              <span class="text-[#555555]">${lessons.length}</span>
-            </div>
-            <div class="space-y-0.5">
-        `;
-
-        lessons.forEach(l => {
-          const isCompleted = completedLessons.includes(l.id);
-          const isActive = l.originalIndex === currentLessonIndex;
-          html += `
-            <button onclick="selectLesson(${l.originalIndex})" class="w-full text-left px-2.5 py-2 rounded-xl text-xs flex items-center justify-between transition-all ${
-              isActive 
-                ? 'bg-white text-black font-semibold shadow-sm' 
-                : 'text-[#a0a0a0] hover:bg-[#181818] hover:text-white'
-            }">
-              <div class="flex items-center space-x-2 truncate">
-                <span class="${isCompleted ? 'text-emerald-400' : (isActive ? 'text-neutral-400' : 'text-[#444444]')}">
-                  <i data-lucide="${isCompleted ? 'check-circle-2' : 'circle'}" class="w-3.5 h-3.5"></i>
-                </span>
-                <span class="truncate">${l.code} · ${l.title.split('(')[0].trim()}</span>
-              </div>
-            </button>
-          `;
-        });
-
-        html += `</div></div>`;
-      }
-
-      sidebarNav.innerHTML = html;
-      updateOverallProgress();
-      lucide.createIcons();
-    }
-
-    // Update Overall Progress
-    function updateOverallProgress() {
-      const total = COURSE_DATA.length;
-      const done = completedLessons.length;
-      const pct = Math.round((done / total) * 100);
-
-      progressBar.style.width = `${pct}%`;
-      completedBadge.innerText = `${pct}%`;
-      overallProgressText.innerText = `${done}/${total}`;
-    }
-
-    // Load Specific Lesson with Threads Post Aesthetic
-    function loadLesson(index) {
-      currentLessonIndex = index;
-      const lesson = COURSE_DATA[index];
-      if (!lesson) return;
-
-      // Update Header
-      lessonBadge.innerText = lesson.badge;
-      lessonDuration.innerText = lesson.duration;
-      lessonTitle.innerText = `${lesson.code} · ${lesson.title}`;
-      lessonSummary.innerText = lesson.summary;
-
-      // Goals
-      lessonGoalsList.innerHTML = lesson.learningGoals.map(g => `
-        <li class="flex items-start gap-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0"></span>
-          <span>${g}</span>
-        </li>
-      `).join('');
-
-      // Completion Button State
-      const isDone = completedLessons.includes(lesson.id);
-      if (isDone) {
-        markCompletedBtn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-950/40 text-emerald-300 border border-emerald-800/60';
-        markCompletedText.innerText = 'Đã hoàn thành';
-      } else {
-        markCompletedBtn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-[#333333] bg-[#202020] hover:bg-[#282828] text-white';
-        markCompletedText.innerText = 'Đánh dấu đã học';
-      }
-
-      // Theory Sections (Threads Thread-Post Style with Connecting Line)
-      theorySections.innerHTML = lesson.sections.map((sec, sIdx) => {
-        // Count how many questions belong to this section
-        const relevantQs = (lesson.practiceQuestions || []).filter(q => q.subtopic === sIdx);
-        const qCount = relevantQs.length;
-
+      sidebarNav.innerHTML = TOPICS.map((t, idx) => {
+        const isActive = idx === currentTopicIndex;
         return `
-        <article class="bg-[#181818] border border-[#262626] rounded-3xl p-5 sm:p-7 space-y-5 relative shadow-sm">
-          
-          <!-- Post Header -->
-          <div class="flex items-center justify-between border-b border-[#242424] pb-3">
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-full bg-white text-black flex items-center justify-center font-bold text-xs shadow-sm">
-                ${sIdx + 1}
-              </div>
-              <h3 class="text-base sm:text-lg font-bold text-white tracking-tight">
-                ${sec.title}
-              </h3>
+          <button onclick="selectTopic(${idx})" class="w-full text-left px-3 py-2.5 rounded-xl text-xs flex items-center justify-between transition-all ${
+            isActive 
+              ? 'bg-white text-black font-bold shadow-sm' 
+              : 'text-[#999999] hover:bg-[#1a1a1a] hover:text-white font-medium'
+          }">
+            <div class="flex items-center gap-2 truncate">
+              <span class="font-mono text-[11px] ${isActive ? 'text-black' : 'text-[#777777]'}">${t.code}</span>
+              <span class="truncate">${t.title}</span>
             </div>
-            <span class="text-[11px] text-[#777777] font-medium">Trọng tâm ${sIdx + 1}/${lesson.sections.length}</span>
-          </div>
-
-          <!-- Thread Node 1: Tại sao trong AI cần học? -->
-          ${sec.whyInAI ? `
-            <div class="relative pl-7 thread-node">
-              <div class="thread-line"></div>
-              <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#202020] border border-[#333333] flex items-center justify-center text-white z-10">
-                <i data-lucide="help-circle" class="w-3.5 h-3.5 text-neutral-300"></i>
-              </div>
-              <div class="space-y-1">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-[#888888]">Tại sao trong AI cần học cái này?</div>
-                <div class="text-xs sm:text-sm text-[#e0e0e0] leading-relaxed">${sec.whyInAI}</div>
-              </div>
-            </div>
-          ` : ''}
-
-          <!-- Rich Concepts (Viblo Interview & Feynman Style) -->
-          ${sec.concepts && sec.concepts.length ? `
-            <div class="space-y-4 pt-1">
-              ${sec.concepts.map((concept, cIdx) => `
-                <div class="bg-[#131313] border border-[#242424] rounded-2xl p-4 sm:p-5 space-y-4 hover:border-[#333333] transition-all">
-                  
-                  <!-- Concept Header -->
-                  <div class="flex items-center justify-between border-b border-[#202020] pb-2.5">
-                    <div class="flex items-center gap-2">
-                      <span class="w-5 h-5 rounded-full bg-[#242424] text-white font-bold text-[11px] flex items-center justify-center">${cIdx + 1}</span>
-                      <h4 class="text-xs sm:text-sm font-bold text-white tracking-tight">${concept.name}</h4>
-                    </div>
-                    <span class="text-[10px] uppercase font-semibold text-neutral-400 bg-[#1c1c1c] px-2 py-0.5 rounded-full border border-[#2a2a2a]">${concept.tag || 'Trọng tâm'}</span>
-                  </div>
-
-                  <!-- Interview Question Box (Viblo Style) -->
-                  ${concept.interviewQuestion ? `
-                    <div class="bg-[#161616] border-l-2 border-amber-400 rounded-r-xl p-3 text-xs">
-                      <div class="text-[10px] font-bold uppercase tracking-wider text-amber-400 mb-1 flex items-center gap-1.5">
-                        <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Câu hỏi phỏng vấn AI thực chiến
-                      </div>
-                      <p class="text-neutral-200 italic font-medium leading-relaxed">${concept.interviewQuestion}</p>
-                    </div>
-                  ` : ''}
-
-                  <!-- Intuition / Feynman -->
-                  ${concept.intuition ? `
-                    <div class="space-y-1">
-                      <div class="text-[10px] font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
-                        <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-400"></i> Bản chất & Trực giác đời thường
-                      </div>
-                      <div class="text-xs sm:text-sm text-[#cccccc] leading-relaxed whitespace-pre-line pl-1">
-                        ${concept.intuition}
-                      </div>
-                    </div>
-                  ` : ''}
-
-                  <!-- Mathematical Formula Block -->
-                  ${concept.formula ? `
-                    <div class="bg-[#0e0e0e] p-4 rounded-xl border border-[#262626] space-y-1.5">
-                      <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
-                        <i data-lucide="code-2" class="w-3.5 h-3.5"></i> Công thức & Bản chất toán học
-                      </div>
-                      <div class="text-xs sm:text-sm text-neutral-100 leading-relaxed overflow-x-auto whitespace-pre-line py-1">
-                        ${concept.formula}
-                      </div>
-                    </div>
-                  ` : ''}
-
-                  <!-- Step-by-step Example -->
-                  ${concept.example ? `
-                    <div class="bg-[#121614] p-3.5 rounded-xl border border-[#1b2b20] text-xs space-y-1">
-                      <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Ví dụ tính toán từng bước
-                      </div>
-                      <div class="text-[#cfdad5] leading-relaxed whitespace-pre-line font-mono text-[11px]">
-                        ${concept.example}
-                      </div>
-                    </div>
-                  ` : ''}
-
-                  <!-- AI Application -->
-                  ${concept.aiApplication ? `
-                    <div class="bg-[#14161f] p-3.5 rounded-xl border border-[#1e2438] text-xs space-y-1">
-                      <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
-                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Ứng dụng trong AI & Deep Learning
-                      </div>
-                      <div class="text-[#cfd6eb] leading-relaxed whitespace-pre-line">
-                        ${concept.aiApplication}
-                      </div>
-                    </div>
-                  ` : ''}
-
-                  <!-- Quick Tip & Trap -->
-                  ${concept.quickTip ? `
-                    <div class="bg-[#1a1812] p-3 rounded-xl border border-[#38301c] text-xs flex items-start gap-2 text-amber-200/90">
-                      <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5"></i>
-                      <div><strong>Mẹo tính nhanh & Bẫy thi:</strong> ${concept.quickTip}</div>
-                    </div>
-                  ` : ''}
-
-                </div>
-              `).join('')}
-            </div>
-          ` : `
-            <!-- Fallback Nodes for standard sections -->
-            ${sec.analogy ? `
-              <div class="relative pl-7 thread-node">
-                <div class="thread-line"></div>
-                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#202020] border border-[#333333] flex items-center justify-center text-white z-10">
-                  <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-300"></i>
-                </div>
-                <div class="space-y-1.5">
-                  <div class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Hình dung đời thường (Feynman Intuition)</div>
-                  <div class="text-xs sm:text-sm text-[#cccccc] leading-relaxed whitespace-pre-line bg-[#141414] p-4 rounded-2xl border border-[#222222] font-normal">
-                    ${sec.analogy}
-                  </div>
-                </div>
-              </div>
-            ` : ''}
-
-            ${sec.formulaBox ? `
-              <div class="relative pl-7 thread-node">
-                <div class="thread-line"></div>
-                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#202020] border border-[#333333] flex items-center justify-center text-white z-10">
-                  <i data-lucide="code-2" class="w-3.5 h-3.5 text-indigo-300"></i>
-                </div>
-                <div class="space-y-1.5">
-                  <div class="text-[11px] font-bold uppercase tracking-wider text-[#888888]">Bản chất công thức & Toán học</div>
-                  <div class="text-xs sm:text-sm text-[#f0f0f0] bg-[#121212] p-4 rounded-2xl border border-[#242424] space-y-2 whitespace-pre-line leading-relaxed">
-                    ${sec.formulaBox}
-                  </div>
-                </div>
-              </div>
-            ` : ''}
-
-            ${sec.quickTip ? `
-              <div class="relative pl-7 thread-node">
-                <div class="absolute left-0 top-0.5 w-6 h-6 rounded-full bg-[#182820] border border-emerald-700/60 flex items-center justify-center text-emerald-400 z-10">
-                  <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-                </div>
-                <div class="space-y-1">
-                  <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Mẹo tính nhẩm 5 giây khi đi thi</div>
-                  <div class="text-xs sm:text-sm text-emerald-200/90 bg-[#121c16] p-3.5 rounded-2xl border border-emerald-900/40">
-                    ${sec.quickTip}
-                  </div>
-                </div>
-              </div>
-            ` : ''}
-          `}
-
-          <!-- Section CTA Link to Practice Questions -->
-          ${qCount > 0 ? `
-            <div class="mt-4 pt-3.5 border-t border-[#242424] flex flex-wrap items-center justify-between gap-2.5 bg-[#141414] p-3.5 rounded-2xl border border-[#202020]">
-              <div class="text-xs text-[#888888] flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Phần này có <strong>${qCount}</strong> câu hỏi thực chiến liên quan trong đề thi</span>
-              </div>
-              <button onclick="jumpToQuizSubtopic(${sIdx})" 
-                class="px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
-                <span>Luyện ngay ${qCount} câu này</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          ` : ''}
-
-        </article>
-      `;
-      }).join('');
-
-      // Traps List
-      trapsList.innerHTML = lesson.traps.map(trap => `
-        <div class="bg-[#181818] border border-[#282828] rounded-2xl p-4 sm:p-5 hover:border-[#383838] transition">
-          <h4 class="text-xs sm:text-sm font-bold text-amber-400 flex items-center gap-2 mb-1.5">
-            <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
-            ${trap.trap}
-          </h4>
-          <p class="text-xs sm:text-sm text-[#a0a0a0] leading-relaxed pl-6 border-l border-[#2e2e2e]">
-            ${trap.explanation}
-          </p>
-        </div>
-      `).join('');
-
-      // Cheat Sheet Cards
-      // Ultra-Fast Recall & Cheat Sheet Rendering (Bản rút gọn cực ngắn như ảnh mẫu)
-      const qSummary = window.QUICK_SUMMARY_DATA && window.QUICK_SUMMARY_DATA[lesson.id];
-      let summaryHtml = '';
-
-      if (qSummary) {
-        summaryHtml += `
-          <div class="bg-[#161616] border border-[#282828] rounded-3xl p-5 sm:p-7 space-y-6 mb-6 shadow-sm">
-            <div class="border-b border-[#242424] pb-3.5">
-              <div class="flex items-center gap-2 mb-1.5">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">Bản Rút Gọn Cực Ngắn</span>
-                <span class="text-[11px] text-[#777777] font-medium">Bấm máy & Mẹo trắc nghiệm</span>
-              </div>
-              <h2 class="text-sm sm:text-base font-bold text-white tracking-tight">${qSummary.title}</h2>
-            </div>
-
-            <div class="space-y-6">
-              ${qSummary.groups.map(group => `
-                <div class="space-y-2.5">
-                  <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                    <span>${group.category}:</span>
-                  </h3>
-                  <ul class="space-y-2 pl-4 sm:pl-5 text-xs sm:text-[13px] text-[#cccccc] leading-relaxed">
-                    ${group.items.map(it => {
-                      let formatted = it.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
-                      return `
-                        <li class="relative before:content-['○'] before:absolute before:-left-4 before:text-[#777777] before:text-xs">
-                          ${formatted}
-                        </li>
-                      `;
-                    }).join('')}
-                  </ul>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      // Quick 1-click Cards
-      summaryHtml += `
-        <div class="border-t border-[#242424] pt-5">
-          <h4 class="text-xs font-bold text-[#888888] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <i data-lucide="zap" class="w-3.5 h-3.5 text-yellow-400"></i>
-            Thẻ công thức tra nhanh 1-Click
-          </h4>
-          <div class="grid sm:grid-cols-2 gap-2.5">
-            ${lesson.cheatSheet.map(item => `
-              <div class="bg-[#181818] border border-[#282828] rounded-2xl p-3.5 flex items-center justify-between hover:border-[#383838] transition">
-                <span class="text-xs text-[#e0e0e0] font-mono">${item}</span>
-                <button onclick="copyToClipboard('${item.replace(/'/g, "\'")}')" class="text-[#666666] hover:text-white p-1" title="Sao chép">
-                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                </button>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-
-      cheatSheetCards.innerHTML = summaryHtml;
-
-      // Render Quiz dynamically with current subtopic filter
-      renderQuiz();
-
-      // Prev / Next Navigation buttons
-      if (index > 0) {
-        prevLessonBtn.classList.remove('invisible');
-        prevLessonTitle.innerText = COURSE_DATA[index - 1].code;
-      } else {
-        prevLessonBtn.classList.add('invisible');
-      }
-
-      if (index < COURSE_DATA.length - 1) {
-        nextLessonBtn.classList.remove('invisible');
-        nextLessonTitle.innerText = COURSE_DATA[index + 1].code;
-      } else {
-        nextLessonBtn.classList.add('invisible');
-      }
-
-      // Re-render MathJax / KaTeX
-      renderMathInElement(document.getElementById('lessonContainer'), {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false }
-        ],
-        throwOnError: false
-      });
-
-      // Update active state in sidebar
-      renderSidebar();
-      lucide.createIcons();
-
-      // Scroll to top smoothly
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Select Lesson
-    window.selectLesson = function(idx) {
-      loadLesson(idx);
-      document.getElementById('sidebar').classList.add('-translate-x-full');
-    };
-
-    // Toggle Completed Status
-    markCompletedBtn.addEventListener('click', () => {
-      const lesson = COURSE_DATA[currentLessonIndex];
-      const idx = completedLessons.indexOf(lesson.id);
-      if (idx > -1) {
-        completedLessons.splice(idx, 1);
-      } else {
-        completedLessons.push(lesson.id);
-        confetti({ particleCount: 60, spread: 50, origin: { y: 0.7 } });
-      }
-      localStorage.setItem('ai20k_completed_lessons', JSON.stringify(completedLessons));
-      loadLesson(currentLessonIndex);
-    });
-
-    // Render Quiz with Subtopic Filter
-    function renderQuiz() {
-      const lesson = COURSE_DATA[currentLessonIndex];
-      if (!lesson) return;
-      const allQs = lesson.practiceQuestions || [];
-
-      // 1. Render Subtopic Filter Pills
-      let filterHtml = `
-        <button onclick="setQuizFilter(-1)" class="px-3 py-1 rounded-full text-xs font-medium shrink-0 transition ${
-          currentSubtopicFilter === -1 
-            ? 'bg-white text-black font-semibold' 
-            : 'bg-[#181818] text-[#888888] hover:text-white border border-[#262626]'
-        }">
-          Tất cả (${allQs.length})
-        </button>
-      `;
-
-      lesson.sections.forEach((sec, sIdx) => {
-        const count = allQs.filter(q => q.subtopic === sIdx).length;
-        if (count > 0) {
-          const shortTitle = sec.title.split('—')[0].replace(/^\d+\.\s*/, '').trim();
-          const isActive = currentSubtopicFilter === sIdx;
-          filterHtml += `
-            <button onclick="setQuizFilter(${sIdx})" class="px-3 py-1 rounded-full text-xs font-medium shrink-0 transition flex items-center gap-1.5 ${
-              isActive 
-                ? 'bg-white text-black font-semibold' 
-                : 'bg-[#181818] text-[#888888] hover:text-white border border-[#262626]'
-            }">
-              <span>${sIdx + 1}. ${shortTitle}</span>
-              <span class="px-1.5 py-0.2 rounded-full text-[10px] ${isActive ? 'bg-neutral-200 text-black' : 'bg-[#222] text-[#777]'}">${count}</span>
-            </button>
-          `;
-        }
-      });
-      quizFilterBar.innerHTML = filterHtml;
-
-      // 2. Filter questions to show
-      const qsToRender = currentSubtopicFilter === -1 
-        ? allQs 
-        : allQs.filter(q => q.subtopic === currentSubtopicFilter);
-
-      // 3. Update Progress Count
-      const answeredCount = qsToRender.filter(q => quizAnswers[q.id] !== undefined).length;
-      quizScoreText.innerText = `${answeredCount}/${qsToRender.length} câu hoàn thành`;
-
-      // 4. Render Question Cards
-      practiceQuestionsList.innerHTML = qsToRender.map((q, qIdx) => {
-        const storedAns = quizAnswers[q.id];
-        const isAnswered = storedAns !== undefined;
-
-        // Type badge label
-        let typeLabel = 'Trắc nghiệm';
-        if (q.type === 'numeric') typeLabel = 'Điền số';
-        else if (q.type === 'essay') typeLabel = 'Tự luận';
-
-        return `
-          <div class="bg-[#181818] border border-[#282828] rounded-2xl p-5 space-y-3.5 shadow-sm" id="quizCard-${q.id}">
-            <div class="flex items-center justify-between text-xs text-[#777777] border-b border-[#242424] pb-2.5">
-              <div class="flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-[#242424] text-white flex items-center justify-center font-bold text-[10px]">${qIdx + 1}</span>
-                <span class="font-bold text-white">${q.id}</span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#202020] text-neutral-300 border border-[#2e2e2e]">${typeLabel}</span>
-              </div>
-              <div class="flex items-center gap-1.5 text-[11px] text-[#666666]">
-                ${(q.tags || []).slice(0, 2).map(t => `<span class="bg-[#141414] px-2 py-0.5 rounded-md border border-[#222]">${t}</span>`).join('')}
-              </div>
-            </div>
-
-            <!-- Prompt -->
-            <div class="text-xs sm:text-sm font-medium text-white leading-relaxed">${q.prompt}</div>
-
-            <!-- MCQ Options -->
-            ${q.options && q.options.length ? `
-              <div class="space-y-1.5 pt-1">
-                ${q.options.map((opt, oIdx) => {
-                  const optLetter = (typeof opt === 'object' && opt !== null) ? (opt.key || String.fromCharCode(65 + oIdx)) : String.fromCharCode(65 + oIdx);
-                  const optText = (typeof opt === 'object' && opt !== null) ? (opt.text || opt.key) : opt;
-                  const isSelected = storedAns === optLetter;
-                  const isCorrect = q.answer === optLetter;
-                  let optClass = 'border-[#262626] bg-[#121212] hover:bg-[#202020] text-[#cccccc]';
-                  
-                  if (isAnswered) {
-                    if (isCorrect) optClass = 'border-emerald-600 bg-emerald-950/40 text-emerald-200 font-semibold';
-                    else if (isSelected) optClass = 'border-red-600 bg-red-950/40 text-red-200';
-                    else optClass = 'border-[#202020] bg-[#101010] text-[#555555] opacity-60';
-                  }
-
-                  return `
-                    <button onclick="handleAnswer('${q.id}', '${optLetter}', '${q.answer}')" 
-                      class="w-full text-left p-2.5 sm:p-3 rounded-xl border text-xs sm:text-sm flex items-center justify-between transition-all ${optClass}">
-                      <div class="flex items-center gap-2.5">
-                        <span class="w-5 h-5 rounded-full bg-[#202020] flex items-center justify-center font-bold text-[10px] text-white shrink-0">${optLetter}</span>
-                        <span>${optText}</span>
-                      </div>
-                      ${isAnswered ? (isCorrect ? '<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>' : (isSelected ? '<i data-lucide="x" class="w-4 h-4 text-red-400"></i>' : '')) : ''}
-                    </button>
-                  `;
-                }).join('')}
-              </div>
-            ` : ''}
-
-            <!-- Numeric Input -->
-            ${q.type === 'numeric' ? `
-              <div class="pt-1.5 space-y-2">
-                <div class="flex items-center gap-2">
-                  <input type="text" id="num-input-${q.id}" placeholder="Nhập kết quả số..." 
-                    value="${storedAns !== undefined ? storedAns : ''}"
-                    class="bg-[#121212] border border-[#2e2e2e] rounded-xl px-3.5 py-2 text-xs sm:text-sm text-white placeholder-[#555] focus:outline-none focus:border-white w-44 font-mono">
-                  <button onclick="handleNumericAnswer('${q.id}', ${q.value}, ${q.tol || 0.05})"
-                    class="px-4 py-2 rounded-xl bg-white text-black font-semibold text-xs hover:bg-neutral-200 transition shadow-sm">
-                    Kiểm tra
-                  </button>
-                  ${isAnswered ? `
-                    <span class="text-xs font-semibold flex items-center gap-1 ${
-                      Math.abs(parseFloat(storedAns) - parseFloat(q.value)) <= (q.tol || 0.05) 
-                        ? 'text-emerald-400' 
-                        : 'text-red-400'
-                    }">
-                      <i data-lucide="${Math.abs(parseFloat(storedAns) - parseFloat(q.value)) <= (q.tol || 0.05) ? 'check' : 'x'}" class="w-3.5 h-3.5"></i>
-                      ${Math.abs(parseFloat(storedAns) - parseFloat(q.value)) <= (q.tol || 0.05) ? 'Chính xác' : 'Đáp án chuẩn: ' + q.value}
-                    </span>
-                  ` : ''}
-                </div>
-              </div>
-            ` : ''}
-
-            <!-- Essay Prompt Action -->
-            ${q.type === 'essay' ? `
-              <div class="pt-1">
-                <button onclick="toggleExplanation('${q.id}')" class="px-3.5 py-1.5 rounded-xl bg-[#202020] hover:bg-[#282828] text-white border border-[#333333] text-xs font-medium flex items-center gap-1.5 transition">
-                  <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400"></i>
-                  <span>Xem gợi ý giải & Rubric chấm điểm</span>
-                </button>
-              </div>
-            ` : ''}
-
-            <!-- Explanation & Details Box -->
-            <div id="expl-${q.id}" class="${isAnswered ? '' : 'hidden'} mt-3 p-4 rounded-2xl bg-[#121212] border border-[#242424] text-xs space-y-2.5">
-              <div class="font-bold text-emerald-400 flex items-center gap-1.5 text-xs sm:text-sm">
-                <i data-lucide="check-circle-2" class="w-4 h-4"></i> 
-                Đáp án đúng: <span class="text-white font-mono">${q.answer || q.value || 'Xem bài giải mẫu bên dưới'}</span>
-              </div>
-              <div class="text-[#cccccc] leading-relaxed whitespace-pre-line text-xs sm:text-sm">${q.explanation || ''}</div>
-              
-              <!-- Distractor Traps Analysis -->
-              ${q.distractors ? `
-                <div class="pt-2.5 border-t border-[#242424] text-[#888888] text-[11px] space-y-1">
-                  <strong class="text-amber-400 uppercase tracking-wider text-[10px]">Phân tích bẫy đề thi:</strong>
-                  <ul class="list-disc pl-4 space-y-1 mt-1 text-[#aaaaaa]">
-                    ${Object.entries(q.distractors).map(([k, v]) => `<li><strong class="text-neutral-200">${k}:</strong> ${v}</li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-
-              <!-- Mistakes Analysis for Numeric -->
-              ${q.mistakes ? `
-                <div class="pt-2.5 border-t border-[#242424] text-[#888888] text-[11px] space-y-1">
-                  <strong class="text-amber-400 uppercase tracking-wider text-[10px]">Lỗi nhẩm sai thường gặp:</strong>
-                  <ul class="list-disc pl-4 space-y-1 mt-1 text-[#aaaaaa]">
-                    ${Object.entries(q.mistakes).map(([k, v]) => `<li><strong class="text-neutral-200">${k}:</strong> ${v}</li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-
-              <!-- Essay Rubric -->
-              ${q.rubric ? `
-                <div class="pt-2.5 border-t border-[#242424] text-[11px] space-y-1.5">
-                  <strong class="text-indigo-400 uppercase tracking-wider text-[10px]">Tiêu chí chấm điểm (Rubric):</strong>
-                  <div class="space-y-1">
-                    ${q.rubric.map(r => `
-                      <div class="flex items-start justify-between bg-[#181818] p-2 rounded-lg border border-[#262626]">
-                        <span class="text-[#cccccc]">${r.criterion}</span>
-                        <span class="font-bold text-indigo-300 ml-2 shrink-0">${r.points}đ</span>
-                      </div>
-                    `).join('')}
-                  </div>
-                </div>
-              ` : ''}
-
-              <!-- Essay Model Answer -->
-              ${q.model_answer ? `
-                <div class="pt-2.5 border-t border-[#242424] text-[11px] space-y-1">
-                  <strong class="text-emerald-400 uppercase tracking-wider text-[10px]">Bài giải mẫu chuẩn:</strong>
-                  <div class="text-[#cccccc] bg-[#161616] p-3 rounded-xl border border-[#262626] whitespace-pre-line leading-relaxed">
-                    ${q.model_answer}
-                  </div>
-                </div>
-              ` : ''}
-
-              <!-- Deep Dive / Long Breakdown -->
-              ${q.long ? `
-                <div class="pt-2 border-t border-[#242424]">
-                  <button onclick="toggleDeepDive('${q.id}')" class="text-[11px] text-neutral-400 hover:text-white flex items-center gap-1">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
-                    <span>Xem phân tích chuyên sâu & Sơ đồ minh họa</span>
-                  </button>
-                  <div id="deep-${q.id}" class="hidden mt-2 p-3.5 rounded-xl bg-[#161616] border border-[#282828] text-xs text-[#cccccc] space-y-2 whitespace-pre-line leading-relaxed">
-                    ${q.long}
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-
-          </div>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0 ${isActive ? 'text-black' : 'text-[#555555]'}"></i>
+          </button>
         `;
       }).join('');
-
-      // Re-render KaTeX in quiz container
-      renderMathInElement(practiceQuestionsList, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false }
-        ],
-        throwOnError: false
-      });
       lucide.createIcons();
     }
 
-    // Filter Quiz by Subtopic
-    window.setQuizFilter = function(sIdx) {
-      currentSubtopicFilter = sIdx;
-      renderQuiz();
-    };
+    function loadTopic(idx) {
+      currentTopicIndex = idx;
+      const topic = TOPICS[idx];
+      const data = window.QUICK_SUMMARY_DATA && window.QUICK_SUMMARY_DATA[topic.id];
 
-    // Jump from Theory section CTA to Quiz Subtopic
-    window.jumpToQuizSubtopic = function(sIdx) {
-      currentSubtopicFilter = sIdx;
-      // Switch active tab to Quiz
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.remove('active', 'border-white', 'text-white');
-        b.classList.add('border-transparent', 'text-[#777777]');
-      });
-      const quizBtn = document.querySelector('.tab-btn[data-tab="quiz"]');
-      if (quizBtn) {
-        quizBtn.classList.add('active', 'border-white', 'text-white');
-        quizBtn.classList.remove('border-transparent', 'text-[#777777]');
-      }
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
-      document.getElementById('tabContent-quiz').classList.remove('hidden');
-
-      renderQuiz();
-      document.getElementById('tabContent-quiz').scrollIntoView({ behavior: 'smooth' });
-    };
-
-    // Answer MCQ Question
-    window.handleAnswer = function(qId, choice, correct) {
-      quizAnswers[qId] = choice;
-      localStorage.setItem('ai20k_quiz_answers', JSON.stringify(quizAnswers));
-      if (choice === correct) {
-        confetti({ particleCount: 35, spread: 45 });
-      }
-      renderQuiz();
-    };
-
-    // Answer Numeric Question
-    window.handleNumericAnswer = function(qId, correctVal, tol) {
-      const inputEl = document.getElementById(`num-input-${qId}`);
-      if (!inputEl) return;
-      const valStr = inputEl.value.trim().replace(',', '.');
-      if (!valStr) return;
-      const userVal = parseFloat(valStr);
-      quizAnswers[qId] = userVal;
-      localStorage.setItem('ai20k_quiz_answers', JSON.stringify(quizAnswers));
-      if (Math.abs(userVal - correctVal) <= (tol || 0.05)) {
-        confetti({ particleCount: 40, spread: 50 });
-      }
-      renderQuiz();
-    };
-
-    window.toggleExplanation = function(qId) {
-      const el = document.getElementById(`expl-${qId}`);
-      if (el) el.classList.toggle('hidden');
-    };
-
-    window.toggleDeepDive = function(qId) {
-      const el = document.getElementById(`deep-${qId}`);
-      if (el) el.classList.toggle('hidden');
-    };
-
-    // Tabs switching (Minimalist Threads Style)
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('active', 'border-white', 'text-white');
-          b.classList.add('border-transparent', 'text-[#777777]');
-        });
-        btn.classList.add('active', 'border-white', 'text-white');
-        btn.classList.remove('border-transparent', 'text-[#777777]');
-
-        const tab = btn.getAttribute('data-tab');
-        document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
-        document.getElementById(`tabContent-${tab}`).classList.remove('hidden');
-
-        // Re-render math in active tab
-        renderMathInElement(document.getElementById(`tabContent-${tab}`), {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '$', right: '$', display: false }
-          ],
-          throwOnError: false
-        });
-        lucide.createIcons();
-      });
-    });
-
-    // Prev / Next button listeners
-    prevLessonBtn.addEventListener('click', () => {
-      if (currentLessonIndex > 0) loadLesson(currentLessonIndex - 1);
-    });
-    nextLessonBtn.addEventListener('click', () => {
-      if (currentLessonIndex < COURSE_DATA.length - 1) loadLesson(currentLessonIndex + 1);
-    });
-
-    // Copy to clipboard helper
-    window.copyToClipboard = function(text) {
-      navigator.clipboard.writeText(text);
-      alert('Đã sao chép: ' + text);
-    };
-
-    // Search functionality
-    const searchInput = document.getElementById('searchInput');
-    const searchResultsBox = document.getElementById('searchResultsBox');
-    const searchResultsList = document.getElementById('searchResultsList');
-    const searchQueryText = document.getElementById('searchQueryText');
-    const closeSearchBtn = document.getElementById('closeSearchBtn');
-
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.trim().toLowerCase();
-      if (!query) {
-        searchResultsBox.classList.add('hidden');
+      if (!data) {
+        recallContainer.innerHTML = '<div class="text-xs text-[#777777]">Đang cập nhật nội dung...</div>';
         return;
       }
 
-      const results = [];
-      COURSE_DATA.forEach((lesson, idx) => {
-        let matchCount = 0;
-        if (lesson.title.toLowerCase().includes(query)) matchCount += 3;
-        if (lesson.summary.toLowerCase().includes(query)) matchCount += 2;
-        lesson.sections.forEach(sec => {
-          if (sec.title.toLowerCase().includes(query) || (sec.analogy && sec.analogy.toLowerCase().includes(query))) matchCount += 1;
-        });
-        lesson.cheatSheet.forEach(cs => {
-          if (cs.toLowerCase().includes(query)) matchCount += 2;
-        });
-
-        if (matchCount > 0) {
-          results.push({ ...lesson, idx, matchCount });
-        }
-      });
-
-      results.sort((a, b) => b.matchCount - a.matchCount);
-
-      if (results.length > 0) {
-        searchQueryText.innerText = query;
-        searchResultsList.innerHTML = results.map(r => `
-          <button onclick="selectLesson(${r.idx}); searchResultsBox.classList.add('hidden');" 
-            class="w-full text-left p-2.5 rounded-xl bg-[#141414] hover:bg-[#202020] border border-[#262626] flex items-center justify-between text-xs transition">
-            <div>
-              <span class="font-bold text-white">${r.code}</span>
-              <span class="text-[#cccccc] ml-1 font-medium">${r.title}</span>
-              <p class="text-[11px] text-[#777777] truncate max-w-md mt-0.5">${r.summary}</p>
+      let html = `
+        <div class="space-y-6">
+          <!-- Main Header Card -->
+          <div class="border-b border-[#222222] pb-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-white/10 text-white border border-white/20">
+                ${topic.code}
+              </span>
+              <span class="text-xs text-[#777777] font-medium">${topic.title}</span>
             </div>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-[#555555]"></i>
-          </button>
-        `).join('');
-        searchResultsBox.classList.remove('hidden');
-        lucide.createIcons();
-      } else {
-        searchQueryText.innerText = query;
-        searchResultsList.innerHTML = '<div class="text-xs text-[#777777] p-2">Không tìm thấy kết quả phù hợp.</div>';
-        searchResultsBox.classList.remove('hidden');
-      }
-    });
-
-    closeSearchBtn.addEventListener('click', () => {
-      searchResultsBox.classList.add('hidden');
-      searchInput.value = '';
-    });
-
-    // Cheat Sheet Modal
-    const cheatModal = document.getElementById('cheatModal');
-    const allCheatsContent = document.getElementById('allCheatsContent');
-    document.getElementById('btnCheatSheetAll').addEventListener('click', () => {
-      let html = '';
-      COURSE_DATA.forEach(lesson => {
-        html += `
-          <div class="border-b border-[#242424] pb-4">
-            <h4 class="font-bold text-white text-xs mb-2">${lesson.code} · ${lesson.title}</h4>
-            <div class="grid sm:grid-cols-2 gap-2">
-              ${lesson.cheatSheet.map(cs => `
-                <div class="bg-[#121212] p-2 rounded-xl border border-[#242424] font-mono text-[11px] text-[#cccccc]">
-                  ${cs}
-                </div>
-              `).join('')}
-            </div>
+            <h1 class="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+              ${data.title}
+            </h1>
           </div>
-        `;
+
+          <!-- Groups -->
+          <div class="space-y-7">
+            ${data.groups.map(group => `
+              <div class="space-y-3">
+                <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                  <span>${group.category}:</span>
+                </h2>
+                <div class="space-y-2.5 pl-5 text-[13px] sm:text-sm text-[#e0e0e0] leading-relaxed">
+                  ${group.items.map(it => {
+                    let formatted = it.replace(/\\*\\*(.*?)\\*\\*/g, '<strong class="text-white font-semibold">$1</strong>');
+                    return `
+                      <div class="relative pl-5 circle-bullet">
+                        ${formatted}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Next / Prev Controls -->
+          <div class="flex items-center justify-between pt-8 border-t border-[#222222] mt-10">
+            <button onclick="if(currentTopicIndex > 0) selectTopic(currentTopicIndex - 1)" 
+              class="px-4 py-2 rounded-xl text-xs font-semibold bg-[#181818] hover:bg-[#222222] border border-[#282828] text-[#cccccc] hover:text-white transition ${currentTopicIndex === 0 ? 'opacity-30 pointer-events-none' : ''}">
+              ← Chuyên đề trước
+            </button>
+            <button onclick="if(currentTopicIndex < TOPICS.length - 1) selectTopic(currentTopicIndex + 1)" 
+              class="px-4 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-neutral-200 text-black transition ${currentTopicIndex === TOPICS.length - 1 ? 'opacity-30 pointer-events-none' : ''}">
+              Chuyên đề tiếp theo →
+            </button>
+          </div>
+        </div>
+      `;
+
+      recallContainer.innerHTML = html;
+
+      // Render KaTeX
+      renderMathInElement(recallContainer, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
       });
-      allCheatsContent.innerHTML = html;
-      cheatModal.classList.remove('hidden');
+
+      renderSidebar();
       lucide.createIcons();
-    });
-    document.getElementById('closeCheatModal').addEventListener('click', () => {
-      cheatModal.classList.add('hidden');
-    });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-    // Reset Progress
-    document.getElementById('btnResetProgress').addEventListener('click', () => {
-      if (confirm('Bạn có chắc muốn xóa toàn bộ tiến độ đã học và kết quả quiz?')) {
-        completedLessons = [];
-        quizAnswers = {};
-        localStorage.removeItem('ai20k_completed_lessons');
-        localStorage.removeItem('ai20k_quiz_answers');
-        loadLesson(currentLessonIndex);
-      }
-    });
+    window.selectTopic = function(idx) {
+      loadTopic(idx);
+      document.getElementById('sidebar').classList.add('-translate-x-full');
+    };
 
-    // Keyboard navigation (Ctrl+K for search)
-    window.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInput.focus();
-      }
-    });
-
-    // Initial Load
     document.addEventListener('DOMContentLoaded', () => {
-      loadLesson(0);
+      loadTopic(0);
     });
   </script>
 </body>
