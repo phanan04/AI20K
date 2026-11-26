@@ -190,7 +190,55 @@ function diagrams(el){
   if(!mmReady){const dark=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()==="#0f1714";mermaid.initialize({startOnLoad:false,securityLevel:"strict",theme:dark?"dark":"default"});mmReady=true}
   const nodes=[...el.querySelectorAll("pre.mermaid:not([data-processed])")];if(nodes.length)mermaid.run({nodes}).catch(()=>{});
 }
-function longBox(q){return q.long?`<details class="long" data-q="${q.id}"><summary>Giải thích chi tiết</summary><div class="mdx"></div></details>`:""}
+function fastRecallBox(q){
+  if(!q) return "";
+  let kw = "";
+  if(Array.isArray(q.tags)) kw = q.tags.join(", ");
+  else if(q.tags) kw = String(q.tags);
+  if(!kw) kw = "Kiến thức trọng tâm";
+
+  let formula = "";
+  if(q.long){
+    const m = q.long.match(/#### Ý chính\s*\n+([^\n]+)/);
+    if(m && m[1]) formula = m[1].trim();
+  }
+  if(!formula || formula.length < 5){
+    if(q.explanation) formula = q.explanation.split(/\.\s+/)[0].trim();
+    else formula = "Nắm vững lý thuyết cốt lõi của câu hỏi.";
+  }
+
+  let tip = "";
+  if(q.long){
+    const mTrap = q.long.match(/#### Bẫy thường gặp\s*\n+-\s*([^\n]+)/);
+    if(mTrap && mTrap[1]) tip = "Cảnh giác: " + mTrap[1].trim();
+  }
+  if(!tip && q.explanation){
+    const mQuick = q.explanation.match(/Kiểm tra nhanh:?([^\.\n]+)/);
+    if(mQuick && mQuick[1]) tip = "Mẹo nhẩm: " + mQuick[1].trim();
+    else if(q.mistakes && q.mistakes.length > 0 && q.mistakes[0].why) tip = "Cảnh giác: " + q.mistakes[0].why.trim();
+    else tip = "Ghi nhớ: " + q.explanation.split(/\.\s+/)[0].trim();
+  }
+
+  return `<div class="fast-recall-card" style="margin-top:14px;margin-bottom:14px;padding:12px 14px;background:#181818;border:1px solid #2e2e2e;border-radius:12px;font-size:0.86rem;line-height:1.5;">
+    <div style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;color:#f59e0b;margin-bottom:8px;">
+      <span>⚡ HỌC NHANH: TỪ KHÓA · CÔNG THỨC · MẸO NHỚ</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:8px;margin-bottom:8px;">
+      <div style="background:#121212;padding:8px 10px;border-radius:8px;border:1px solid #242424;">
+        <div style="font-size:0.75rem;font-weight:700;color:#38bdf8;margin-bottom:2px;">🔑 TỪ KHÓA</div>
+        <div style="font-weight:600;color:#f3f4f6;">${esc(kw)}</div>
+      </div>
+      <div style="background:#121212;padding:8px 10px;border-radius:8px;border:1px solid #242424;">
+        <div style="font-size:0.75rem;font-weight:700;color:#fbbf24;margin-bottom:2px;">📐 CÔNG THỨC / ĐỊNH NGHĨA</div>
+        <div style="color:#e5e7eb;">${inline(formula)}</div>
+      </div>
+    </div>
+    <div style="background:rgba(239, 68, 68, 0.08);border:1px solid rgba(239, 68, 68, 0.2);padding:8px 10px;border-radius:8px;color:#fca5a5;font-size:0.82rem;">
+      <b style="color:#fbbf24;">⚡ Mẹo nhớ & Bẫy:</b> ${inline(tip)}
+    </div>
+  </div>`;
+}
+function longBox(q){return fastRecallBox(q) + (q.long?`<details class="long" data-q="${q.id}"><summary>Giải thích chi tiết</summary><div class="mdx"></div></details>`:"")}
 document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.long")||!d.open)return;const box=d.querySelector(".mdx");
   if(!box.dataset.done){const q=E&&E.questions.find(x=>x.id===d.dataset.q);box.innerHTML=md(q?q.long:"");box.dataset.done="1";typeset(box);diagrams(box)}},true);
 let E=null,ans={},rub={},done=false,left=0,tick=null,seed=0,view=[],mode="exam",first={},reveal={},draft={};
