@@ -26,7 +26,7 @@
     }
   </script>
 
-  <!-- MathJax Configuration (Bảo đảm biên dịch 100% công thức toán học) -->
+  <!-- MathJax Configuration -->
   <script>
     window.MathJax = {
       tex: {
@@ -169,6 +169,12 @@
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
     });
 
+    function formatMarkdown(text) {
+      if (!text) return '';
+      // Format markdown bold: **text** -> <strong class="text-white font-semibold">text</strong>
+      return text.replace(/\*\*([^*]+)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+    }
+
     function renderSidebar() {
       sidebarNav.innerHTML = TOPICS.map((t, idx) => {
         const isActive = idx === currentTopicIndex;
@@ -231,7 +237,7 @@
                 </h2>
                 <div class="space-y-2.5 pl-5 text-[13px] sm:text-sm text-[#e0e0e0] leading-relaxed">
                   ${group.items.map(it => {
-                    let formatted = it.replace(/\\*\\*(.*?)\\*\\*/g, '<strong class="text-white font-semibold">$1</strong>');
+                    let formatted = formatMarkdown(it);
                     return `
                       <div class="relative pl-5 circle-bullet">
                         ${formatted}
