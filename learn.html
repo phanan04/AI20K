@@ -234,10 +234,6 @@
               <i data-lucide="help-circle" class="w-4 h-4 text-emerald-400"></i>
               Luyện trắc nghiệm test
             </button>
-            <button class="tab-btn px-3.5 py-2.5 font-medium border-b-2 border-transparent text-[#777777] hover:text-white flex items-center gap-1.5 transition text-amber-300 hover:text-amber-200" data-tab="fastrecall">
-              <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
-              ⚡ Học nhanh từng câu
-            </button>
           </div>
 
           <!-- TAB CONTENT: THEORY (Threads Feed Style) -->
@@ -258,7 +254,7 @@
 
           <!-- TAB CONTENT: CHEAT SHEET -->
           <div id="tabContent-cheatsheet" class="tab-pane hidden space-y-3">
-            <div id="cheatSheetCards" class="grid sm:grid-cols-2 gap-2.5"></div>
+            <div id="cheatSheetCards" class="space-y-4"></div>
           </div>
 
           <!-- TAB CONTENT: QUIZ -->
@@ -275,67 +271,6 @@
             <!-- Subtopic Filter Bar -->
             <div id="quizFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1.5 text-xs"></div>
             <div id="practiceQuestionsList" class="space-y-4"></div>
-          </div>
-
-          <!-- TAB CONTENT: FAST RECALL (HỌC NHANH TỪNG CÂU: TỪ KHÓA - CÔNG THỨC - MẸO NHỚ) -->
-          <div id="tabContent-fastrecall" class="tab-pane hidden space-y-5">
-            <!-- Header Card for Fast Recall -->
-            <div class="p-5 bg-gradient-to-r from-[#181818] via-[#1c1c1c] to-[#181818] border border-[#2c2c2c] rounded-3xl shadow-xl">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-                <div>
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">Reflex Recall · Tốc độ phản xạ</span>
-                    <span id="fastRecallCountBadge" class="text-xs text-[#888888] font-mono">0 câu hỏi</span>
-                  </div>
-                  <h3 class="text-base sm:text-lg font-bold text-white tracking-tight">Học Nhanh Từng Câu: Từ Khóa · Công Thức · Mẹo Nhớ</h3>
-                  <p class="text-xs text-[#999999] mt-0.5">Rút gọn 3 thành tố phản xạ cho mọi câu hỏi trong Đề tổng hợp và Chuyên đề</p>
-                </div>
-                <!-- Filter search input -->
-                <div class="relative w-full sm:w-64">
-                  <i data-lucide="search" class="w-3.5 h-3.5 text-[#666666] absolute left-3 top-2.5"></i>
-                  <input id="fastRecallSearchInput" type="text" placeholder="Lọc từ khóa / công thức..." 
-                    class="w-full bg-[#121212] border border-[#2a2a2a] rounded-full pl-8 pr-3 py-1.5 text-xs text-[#f3f5f7] placeholder-[#555555] focus:outline-none focus:border-amber-400/60 transition">
-                </div>
-              </div>
-
-              <!-- Exam Picker Dropdown & Quick Selector -->
-              <div class="flex items-center gap-2 pt-3 border-t border-[#242424] overflow-x-auto">
-                <span class="text-xs text-[#777777] shrink-0 font-medium">Bộ câu hỏi:</span>
-                <select id="fastRecallExamSelect" class="bg-[#121212] text-xs text-white border border-[#333333] rounded-xl px-3 py-1.5 focus:outline-none focus:border-white transition cursor-pointer">
-                  <optgroup label="Đề Đánh Giá Năng Lực (Tổng Hợp)">
-                    <option value="E01">ĐGNL-01: Đánh giá đầu vào</option>
-                    <option value="E02">ĐGNL-02: Giữa kỳ Sprint 1</option>
-                    <option value="E03">ĐGNL-03: Giữa kỳ Sprint 2</option>
-                    <option value="E04">ĐGNL-04: Đánh giá chuẩn năng lực AI</option>
-                    <option value="E05">ĐGNL-05: Tốt nghiệp thử nghiệm</option>
-                    <option value="E06">ĐGNL-06: Đánh giá năng lực cuối kỳ</option>
-                  </optgroup>
-                  <optgroup label="Chuyên Đề Trọng Tâm (CĐ-01 đến CĐ-12)">
-                    <option value="T01">CĐ-01: Đại số tuyến tính cho AI</option>
-                    <option value="T02">CĐ-02: Giải tích & Tối ưu hoá cho AI</option>
-                    <option value="T03">CĐ-03: Xác suất thống kê & Thử nghiệm A/B</option>
-                    <option value="T04">CĐ-04: Lập trình Python nâng cao & Thuật toán</option>
-                    <option value="T05">CĐ-05: Xử lý dữ liệu với Pandas & NumPy</option>
-                    <option value="T06">CĐ-06: Kiến trúc mã nguồn, Kiểm thử & CI/CD</option>
-                    <option value="T07">CĐ-07: Học máy truyền thống & Đánh giá mô hình</option>
-                    <option value="T08">CĐ-08: Học sâu & Thị giác máy tính</option>
-                    <option value="T09">CĐ-09: Xử lý ngôn ngữ tự nhiên & Mô hình ngôn ngữ lớn (LLM)</option>
-                    <option value="T10">CĐ-10: Vận hành AI trong sản xuất (MLOps & LLMOps)</option>
-                    <option value="T11">CĐ-11: Tư duy sản phẩm AI & Thiết kế giải pháp</option>
-                    <option value="T12">CĐ-12: Tư duy logic, Đạo đức AI & Tuân thủ pháp lý</option>
-                  </optgroup>
-                </select>
-                <button id="fastRecallSyncLessonBtn" class="shrink-0 px-2.5 py-1 text-xs rounded-xl bg-[#202020] hover:bg-[#282828] text-[#cccccc] hover:text-white border border-[#303030] transition flex items-center gap-1">
-                  <i data-lucide="refresh-cw" class="w-3 h-3"></i>
-                  <span>Xem theo bài đang học</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Question Cards Container -->
-            <div id="fastRecallCardsList" class="space-y-4">
-              <!-- Rendered via JS -->
-            </div>
           </div>
 
           <!-- BOTTOM NAVIGATION BUTTONS -->
@@ -375,7 +310,7 @@
 
   <!-- Load Course Data -->
   <script src="course-data.js"></script>
-  <script src="fast-recall-data.js"></script>
+  <script src="quick-summary-data.js"></script>
 
   <!-- APP CONTROLLER SCRIPT (Threads Styled) -->
   <script>
@@ -700,14 +635,66 @@
       `).join('');
 
       // Cheat Sheet Cards
-      cheatSheetCards.innerHTML = lesson.cheatSheet.map(item => `
-        <div class="bg-[#181818] border border-[#282828] rounded-xl p-3.5 flex items-center justify-between hover:border-[#383838] transition">
-          <span class="text-xs text-[#e0e0e0] font-mono">${item}</span>
-          <button onclick="copyToClipboard('${item.replace(/'/g, "\'")}')" class="text-[#666666] hover:text-white p-1" title="Sao chép">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-          </button>
+      // Ultra-Fast Recall & Cheat Sheet Rendering (Bản rút gọn cực ngắn như ảnh mẫu)
+      const qSummary = window.QUICK_SUMMARY_DATA && window.QUICK_SUMMARY_DATA[lesson.id];
+      let summaryHtml = '';
+
+      if (qSummary) {
+        summaryHtml += `
+          <div class="bg-[#161616] border border-[#282828] rounded-3xl p-5 sm:p-7 space-y-6 mb-6 shadow-sm">
+            <div class="border-b border-[#242424] pb-3.5">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">Bản Rút Gọn Cực Ngắn</span>
+                <span class="text-[11px] text-[#777777] font-medium">Bấm máy & Mẹo trắc nghiệm</span>
+              </div>
+              <h2 class="text-sm sm:text-base font-bold text-white tracking-tight">${qSummary.title}</h2>
+            </div>
+
+            <div class="space-y-6">
+              ${qSummary.groups.map(group => `
+                <div class="space-y-2.5">
+                  <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    <span>${group.category}:</span>
+                  </h3>
+                  <ul class="space-y-2 pl-4 sm:pl-5 text-xs sm:text-[13px] text-[#cccccc] leading-relaxed">
+                    ${group.items.map(it => {
+                      let formatted = it.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+                      return `
+                        <li class="relative before:content-['○'] before:absolute before:-left-4 before:text-[#777777] before:text-xs">
+                          ${formatted}
+                        </li>
+                      `;
+                    }).join('')}
+                  </ul>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Quick 1-click Cards
+      summaryHtml += `
+        <div class="border-t border-[#242424] pt-5">
+          <h4 class="text-xs font-bold text-[#888888] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-yellow-400"></i>
+            Thẻ công thức tra nhanh 1-Click
+          </h4>
+          <div class="grid sm:grid-cols-2 gap-2.5">
+            ${lesson.cheatSheet.map(item => `
+              <div class="bg-[#181818] border border-[#282828] rounded-2xl p-3.5 flex items-center justify-between hover:border-[#383838] transition">
+                <span class="text-xs text-[#e0e0e0] font-mono">${item}</span>
+                <button onclick="copyToClipboard('${item.replace(/'/g, "\'")}')" class="text-[#666666] hover:text-white p-1" title="Sao chép">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            `).join('')}
+          </div>
         </div>
-      `).join('');
+      `;
+
+      cheatSheetCards.innerHTML = summaryHtml;
 
       // Render Quiz dynamically with current subtopic filter
       renderQuiz();
@@ -1055,11 +1042,7 @@
 
         const tab = btn.getAttribute('data-tab');
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
-        const activeTabPane = document.getElementById(`tabContent-${tab}`);
-        if (activeTabPane) activeTabPane.classList.remove('hidden');
-        if (tab === 'fastrecall') {
-          renderFastRecallCards();
-        }
+        document.getElementById(`tabContent-${tab}`).classList.remove('hidden');
 
         // Re-render math in active tab
         renderMathInElement(document.getElementById(`tabContent-${tab}`), {
@@ -1193,159 +1176,9 @@
       }
     });
 
-
-    // FAST RECALL LOGIC (⚡ Học nhanh từng câu)
-    const fastRecallExamSelect = document.getElementById('fastRecallExamSelect');
-    const fastRecallCardsList = document.getElementById('fastRecallCardsList');
-    const fastRecallSearchInput = document.getElementById('fastRecallSearchInput');
-    const fastRecallCountBadge = document.getElementById('fastRecallCountBadge');
-    const fastRecallSyncLessonBtn = document.getElementById('fastRecallSyncLessonBtn');
-
-    let currentFastRecallExamId = 'E01';
-
-    function renderFastRecallCards() {
-      if (!window.FAST_RECALL_DATA) return;
-      const exam = window.FAST_RECALL_DATA[currentFastRecallExamId];
-      if (!exam) return;
-
-      const query = (fastRecallSearchInput ? fastRecallSearchInput.value : '').trim().toLowerCase();
-      let questions = exam.questions || [];
-
-      if (query) {
-        questions = questions.filter(q => 
-          (q.tags && q.tags.toLowerCase().includes(query)) ||
-          (q.formula && q.formula.toLowerCase().includes(query)) ||
-          (q.tip && q.tip.toLowerCase().includes(query)) ||
-          (q.prompt && q.prompt.toLowerCase().includes(query)) ||
-          (q.id && q.id.toLowerCase().includes(query))
-        );
-      }
-
-      if (fastRecallCountBadge) {
-        fastRecallCountBadge.innerText = `${questions.length} / ${exam.questions.length} câu`;
-      }
-
-      if (questions.length === 0) {
-        fastRecallCardsList.innerHTML = `
-          <div class="p-8 text-center text-xs text-[#777777] bg-[#141414] border border-[#222222] rounded-3xl">
-            Không tìm thấy câu hỏi nào phù hợp với từ khóa "${query}".
-          </div>
-        `;
-        return;
-      }
-
-      fastRecallCardsList.innerHTML = questions.map((q, idx) => {
-        return `
-          <div class="bg-[#161616] hover:bg-[#181818] border border-[#242424] hover:border-[#333333] rounded-3xl p-5 sm:p-6 transition-all duration-200 shadow-sm relative group">
-            <!-- Header bar of card -->
-            <div class="flex items-center justify-between gap-2 mb-3 pb-2.5 border-b border-[#222222]">
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-xs font-bold px-2.5 py-0.5 rounded-lg bg-[#222222] text-white border border-[#2f2f2f]">
-                  ${q.id}
-                </span>
-                <span class="text-[11px] text-[#888888] font-medium">${exam.code || exam.id}</span>
-              </div>
-              <div class="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
-                <i data-lucide="check-circle" class="w-3 h-3"></i>
-                <span class="truncate max-w-[200px]">Đ/A: ${q.answer}</span>
-              </div>
-            </div>
-
-            <!-- Question Stem -->
-            <div class="text-xs sm:text-sm text-[#e0e0e0] font-normal leading-relaxed mb-4">
-              ${q.prompt}
-            </div>
-
-            <!-- 3 Core Reflex Columns / Blocks -->
-            <div class="grid sm:grid-cols-3 gap-2.5">
-              
-              <!-- Block 1: Từ khóa -->
-              <div class="bg-[#121212] border border-[#222222] rounded-2xl p-3 flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-sky-400 mb-1.5">
-                  <i data-lucide="key" class="w-3.5 h-3.5"></i>
-                  <span>Từ khóa nhớ</span>
-                </div>
-                <div class="text-xs font-semibold text-white leading-snug">
-                  ${q.tags}
-                </div>
-              </div>
-
-              <!-- Block 2: Công thức / Định nghĩa -->
-              <div class="bg-[#121212] border border-[#222222] rounded-2xl p-3 flex flex-col justify-between sm:col-span-2">
-                <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-400 mb-1.5">
-                  <i data-lucide="code" class="w-3.5 h-3.5"></i>
-                  <span>Công thức & Định nghĩa cốt lõi</span>
-                </div>
-                <div class="text-xs text-[#dddddd] leading-relaxed">
-                  ${q.formula}
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Memory Reflex Hack / Trap Alert -->
-            <div class="mt-2.5 bg-red-950/20 border border-red-900/30 rounded-2xl p-3 flex items-start gap-2.5">
-              <i data-lucide="zap" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
-              <div class="text-xs leading-relaxed">
-                <span class="font-bold text-amber-300">⚡ Mẹo phản xạ & Bẫy thi:</span>
-                <span class="text-[#cccccc] ml-1">${q.tip}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      renderMathInElement(fastRecallCardsList, {
-        delimiters: [
-          { left: '$', right: '$', display: true },
-          { left: '
-  </script>
-</body>
-</html>
-, right: '
-  </script>
-</body>
-</html>
-, display: false }
-        ],
-        throwOnError: false
-      });
-      lucide.createIcons();
-    }
-
-    if (fastRecallExamSelect) {
-      fastRecallExamSelect.addEventListener('change', (e) => {
-        currentFastRecallExamId = e.target.value;
-        renderFastRecallCards();
-      });
-    }
-
-    if (fastRecallSearchInput) {
-      fastRecallSearchInput.addEventListener('input', () => {
-        renderFastRecallCards();
-      });
-    }
-
-    if (fastRecallSyncLessonBtn) {
-      fastRecallSyncLessonBtn.addEventListener('click', () => {
-        const curLesson = COURSE_DATA[currentLessonIndex];
-        if (curLesson) {
-          // If lesson.id is T01..T12 or E01..E06, sync with that
-          if (window.FAST_RECALL_DATA[curLesson.id]) {
-            currentFastRecallExamId = curLesson.id;
-          } else if (curLesson.id === 'DGNL-ALL') {
-            currentFastRecallExamId = 'E01';
-          }
-          if (fastRecallExamSelect) fastRecallExamSelect.value = currentFastRecallExamId;
-          renderFastRecallCards();
-        }
-      });
-    }
-
     // Initial Load
     document.addEventListener('DOMContentLoaded', () => {
       loadLesson(0);
-      renderFastRecallCards();
     });
   </script>
 </body>
