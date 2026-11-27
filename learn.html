@@ -99,8 +99,14 @@
       </div>
     </div>
 
-    <!-- Quick Link to Original Exam Prep -->
-    <div class="flex items-center space-x-3">
+    <!-- Right Actions: Edit Mode Toggle & Exam Prep Link -->
+    <div class="flex items-center space-x-2.5">
+      <!-- Edit Mode Toggle Button -->
+      <button id="toggleEditBtn" onclick="toggleEditMode()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-[#1e1e1e] hover:bg-[#2a2a2a] text-[#cccccc] hover:text-white text-xs font-medium border border-[#333333] transition">
+        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+        <span id="editBtnText">Chỉnh sửa</span>
+      </button>
+
       <a href="index.html" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-semibold transition shadow-sm">
         <i data-lucide="play" class="w-3 h-3 fill-current"></i>
         <span>Phòng thi trắc nghiệm</span>
@@ -113,10 +119,13 @@
     
     <!-- LEFT SIDEBAR -->
     <aside id="sidebar" class="w-72 bg-[#101010] border-r border-[#222222] flex flex-col shrink-0 fixed lg:static inset-y-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out mt-[53px] lg:mt-0">
-      <div class="p-4 border-b border-[#222222]">
+      <div class="p-4 border-b border-[#222222] flex items-center justify-between">
         <div class="text-[11px] text-[#777777] font-semibold tracking-wider uppercase">
           Danh mục chuyên đề
         </div>
+        <button id="resetCustomBtn" onclick="resetCurrentTopic()" class="text-[10px] text-[#666666] hover:text-amber-400 transition" title="Khôi phục chuyên đề này về mặc định">
+          Khôi phục gốc
+        </button>
       </div>
 
       <!-- Nav Menu list -->
@@ -160,9 +169,26 @@
     ];
 
     let currentTopicIndex = 0;
+    let isEditing = false;
+
+    // Load custom user modifications from LocalStorage if any
+    let customSummaryData = {};
+    try {
+      customSummaryData = JSON.parse(localStorage.getItem('ai20k_custom_summary') || '{}');
+    } catch(e) {
+      customSummaryData = {};
+    }
+
+    function getTopicData(topicId) {
+      if (customSummaryData[topicId]) {
+        return customSummaryData[topicId];
+      }
+      return window.QUICK_SUMMARY_DATA && window.QUICK_SUMMARY_DATA[topicId];
+    }
 
     const sidebarNav = document.getElementById('sidebarNav');
     const recallContainer = document.getElementById('recallContainer');
+    const editBtnText = document.getElementById('editBtnText');
 
     // Sidebar Mobile Toggle
     document.getElementById('mobileSidebarBtn').addEventListener('click', () => {
@@ -178,6 +204,7 @@
     function renderSidebar() {
       sidebarNav.innerHTML = TOPICS.map((t, idx) => {
         const isActive = idx === currentTopicIndex;
+        const isCustom = !!customSummaryData[t.id];
         return `
           <button onclick="selectTopic(${idx})" class="w-full text-left px-3 py-2.5 rounded-xl text-xs flex items-center justify-between transition-all ${
             isActive 
@@ -187,6 +214,7 @@
             <div class="flex items-center gap-2 truncate">
               <span class="font-mono text-[11px] ${isActive ? 'text-black' : 'text-[#777777]'}">${t.code}</span>
               <span class="truncate">${t.title}</span>
+              ${isCustom ? '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" title="Đã có nội dung tự chỉnh sửa"></span>' : ''}
             </div>
             <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0 ${isActive ? 'text-black' : 'text-[#555555]'}"></i>
           </button>
@@ -206,13 +234,24 @@
     function loadTopic(idx) {
       currentTopicIndex = idx;
       const topic = TOPICS[idx];
-      const data = window.QUICK_SUMMARY_DATA && window.QUICK_SUMMARY_DATA[topic.id];
+      const data = getTopicData(topic.id);
 
       if (!data) {
         recallContainer.innerHTML = '<div class="text-xs text-[#777777]">Đang cập nhật nội dung...</div>';
         return;
       }
 
+      if (isEditing) {
+        renderEditView(topic, data);
+      } else {
+        renderReadView(topic, data);
+      }
+
+      renderSidebar();
+      lucide.createIcons();
+    }
+
+    function renderReadView(topic, data) {
       let html = `
         <div class="space-y-6">
           <!-- Main Header Card -->
@@ -222,6 +261,7 @@
                 ${topic.code}
               </span>
               <span class="text-xs text-[#777777] font-medium">${topic.title}</span>
+              ${customSummaryData[topic.id] ? '<span class="text-[10px] text-amber-400 bg-amber-950/30 border border-amber-900/40 px-2 py-0.5 rounded-full">Bản tùy chỉnh</span>' : ''}
             </div>
             <h1 class="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
               ${data.title}
@@ -267,15 +307,161 @@
 
       // Trigger MathJax typeset
       triggerMathTypeset(recallContainer);
-
-      renderSidebar();
-      lucide.createIcons();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function renderEditView(topic, data) {
+      let html = `
+        <div class="space-y-6">
+          <div class="border-b border-[#222222] pb-4 flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-400 text-black">
+                  Chế độ chỉnh sửa
+                </span>
+                <span class="text-xs text-[#888888] font-medium">${topic.code} · ${topic.title}</span>
+              </div>
+              <h2 class="text-sm font-semibold text-white">Chỉnh sửa trực tiếp công thức & mẹo nhớ</h2>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="saveCurrentTopic()" class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                <span>Lưu thay đổi</span>
+              </button>
+              <button onclick="toggleEditMode()" class="px-3 py-1.5 rounded-xl bg-[#222222] hover:bg-[#2a2a2a] text-[#cccccc] hover:text-white text-xs transition">
+                Hủy
+              </button>
+            </div>
+          </div>
+
+          <!-- Edit Title -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-medium text-[#888888]">Tiêu đề phần tóm tắt:</label>
+            <input id="editTopicTitle" type="text" value="${data.title.replace(/"/g, '&quot;')}" 
+              class="w-full bg-[#181818] border border-[#2e2e2e] focus:border-white rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition">
+          </div>
+
+          <!-- Edit Groups Container -->
+          <div id="editGroupsContainer" class="space-y-6">
+            ${data.groups.map((group, gIdx) => `
+              <div class="p-4 bg-[#141414] border border-[#262626] rounded-2xl space-y-3 relative group" data-group-index="${gIdx}">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex-1 flex items-center gap-2">
+                    <span class="text-xs font-bold text-amber-400">Nhóm ${gIdx + 1}:</span>
+                    <input type="text" value="${group.category.replace(/"/g, '&quot;')}" 
+                      class="edit-group-cat flex-1 bg-[#1c1c1c] border border-[#303030] focus:border-white rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none transition">
+                  </div>
+                  <button onclick="deleteGroup(${gIdx})" class="text-[#666666] hover:text-red-400 p-1 text-xs" title="Xóa nhóm này">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+
+                <!-- Items textarea -->
+                <div class="space-y-1">
+                  <label class="text-[11px] text-[#777777]">Các dòng công thức / mẹo (Mỗi dòng là một mục ○, hỗ trợ **in đậm** và $công thức$):</label>
+                  <textarea rows="4" class="edit-group-items w-full bg-[#181818] border border-[#282828] focus:border-white rounded-xl p-3 text-xs text-[#e0e0e0] font-mono leading-relaxed focus:outline-none transition">${group.items.join('\n')}</textarea>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Add Group Button -->
+          <button onclick="addNewGroup()" class="w-full py-2.5 rounded-2xl bg-[#161616] hover:bg-[#202020] border border-dashed border-[#333333] hover:border-[#555555] text-xs font-medium text-[#aaaaaa] hover:text-white transition flex items-center justify-center gap-1.5">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>Thêm nhóm công thức mới</span>
+          </button>
+        </div>
+      `;
+
+      recallContainer.innerHTML = html;
+    }
+
+    window.toggleEditMode = function() {
+      isEditing = !isEditing;
+      if (isEditing) {
+        editBtnText.innerText = 'Đang sửa...';
+        document.getElementById('toggleEditBtn').classList.add('border-amber-400', 'text-amber-400');
+      } else {
+        editBtnText.innerText = 'Chỉnh sửa';
+        document.getElementById('toggleEditBtn').classList.remove('border-amber-400', 'text-amber-400');
+      }
+      loadTopic(currentTopicIndex);
+    };
+
+    window.addNewGroup = function() {
+      const topic = TOPICS[currentTopicIndex];
+      const data = getTopicData(topic.id);
+      data.groups.push({
+        category: 'Nhóm công thức mới',
+        items: ['**Tên công thức:** Công thức chi tiết $\\dots$']
+      });
+      renderEditView(topic, data);
+      lucide.createIcons();
+    };
+
+    window.deleteGroup = function(gIdx) {
+      const topic = TOPICS[currentTopicIndex];
+      const data = getTopicData(topic.id);
+      if (confirm('Bạn có chắc muốn xóa nhóm này?')) {
+        data.groups.splice(gIdx, 1);
+        renderEditView(topic, data);
+        lucide.createIcons();
+      }
+    };
+
+    window.saveCurrentTopic = function() {
+      const topic = TOPICS[currentTopicIndex];
+      const titleEl = document.getElementById('editTopicTitle');
+      const catInputs = document.querySelectorAll('.edit-group-cat');
+      const itemsTextareas = document.querySelectorAll('.edit-group-items');
+
+      const newGroups = [];
+      catInputs.forEach((catIn, i) => {
+        const cat = catIn.value.trim() || 'Nhóm';
+        const lines = itemsTextareas[i].value.split('\n')
+          .map(l => l.trim())
+          .filter(l => l.length > 0);
+        newGroups.push({
+          category: cat,
+          items: lines
+        });
+      });
+
+      const updatedTopic = {
+        title: titleEl.value.trim(),
+        groups: newGroups
+      };
+
+      customSummaryData[topic.id] = updatedTopic;
+      localStorage.setItem('ai20k_custom_summary', JSON.stringify(customSummaryData));
+
+      isEditing = false;
+      editBtnText.innerText = 'Chỉnh sửa';
+      document.getElementById('toggleEditBtn').classList.remove('border-amber-400', 'text-amber-400');
+
+      loadTopic(currentTopicIndex);
+    };
+
+    window.resetCurrentTopic = function() {
+      const topic = TOPICS[currentTopicIndex];
+      if (confirm(`Khôi phục nội dung chuyên đề "${topic.code}" về bản mặc định gốc?`)) {
+        delete customSummaryData[topic.id];
+        localStorage.setItem('ai20k_custom_summary', JSON.stringify(customSummaryData));
+        loadTopic(currentTopicIndex);
+      }
+    };
+
     window.selectTopic = function(idx) {
+      if (isEditing) {
+        if (!confirm('Bạn đang ở chế độ sửa, nếu chuyển chuyên đề các thay đổi chưa lưu sẽ mất. Tiếp tục?')) {
+          return;
+        }
+        isEditing = false;
+        editBtnText.innerText = 'Chỉnh sửa';
+        document.getElementById('toggleEditBtn').classList.remove('border-amber-400', 'text-amber-400');
+      }
       loadTopic(idx);
       document.getElementById('sidebar').classList.add('-translate-x-full');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     document.addEventListener('DOMContentLoaded', () => {
