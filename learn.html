@@ -149,7 +149,7 @@
   </div>
 
   <!-- Load Quick Summary Data -->
-  <script src="quick-summary-data.js"></script>
+  <script src="quick-summary-data.js?v=1795746526550"></script>
 
   <script>
     const TOPICS = [
@@ -174,7 +174,16 @@
     // Load custom user modifications from LocalStorage if any
     let customSummaryData = {};
     try {
-      customSummaryData = JSON.parse(localStorage.getItem('ai20k_custom_summary') || '{}');
+      const saved = localStorage.getItem('ai20k_custom_summary');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // If user has old cache without glossary, clear it so new glossary shows up
+        if (parsed.cd01 && !parsed.cd01.glossary) {
+          localStorage.removeItem('ai20k_custom_summary');
+        } else {
+          customSummaryData = parsed;
+        }
+      }
     } catch(e) {
       customSummaryData = {};
     }
