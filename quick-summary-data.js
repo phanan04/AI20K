@@ -1,12 +1,22 @@
 /**
  * quick-summary-data.js
  * Bản rút gọn cực ngắn cho toàn bộ 12 Chuyên đề + Đề Tổng hợp AI20K
- * Chuẩn hóa 100% công thức bấm máy, định nghĩa & mẹo khoanh trắc nghiệm 3 giây
+ * Bổ sung: glossary (Giải thích ký hiệu & định nghĩa cốt lõi siêu dễ nhớ lên trên cùng)
  */
 
 window.QUICK_SUMMARY_DATA = {
   "cd01": {
     "title": "Bản rút gọn cực ngắn cho toàn bộ CĐ-01, chỉ giữ đúng công thức bấm máy & mẹo khoanh trắc nghiệm:",
+    "glossary": [
+      { "symbol": "\\text{tr}(A)", "meaning": "Vết ma trận = Tổng các phần tử trên đường chéo chính (bằng tổng các trị riêng $\\sum \\lambda_i$)." },
+      { "symbol": "\\det(A)", "meaning": "Định thức = Hệ số co giãn diện tích/thể tích (bằng 0 là suy biến, phẳng bẹp)." },
+      { "symbol": "\\|x\\|_1", "meaning": "Chuẩn L1 = Khoảng cách đường phố Manhattan (cộng dồn trị tuyệt đối)." },
+      { "symbol": "\\|x\\|_2", "meaning": "Chuẩn L2 = Khoảng cách đường chim bay Euclidean (căn bậc hai tổng bình phương)." },
+      { "symbol": "u \\cdot v", "meaning": "Tích vô hướng = Đo mức độ cùng hướng giữa 2 vector (bằng 0 là vuông góc)." },
+      { "symbol": "\\text{rank}(A)", "meaning": "Hạng ma trận = Số chiều độc lập tuyến tính tối đa (số thông tin không bị trùng lặp)." },
+      { "symbol": "Av = \\lambda v", "meaning": "Trị riêng $\\lambda$ & vector riêng $v$ = Hướng $v$ không bị đổi phương sau phép biến đổi, chỉ bị co giãn $\\lambda$ lần." },
+      { "symbol": "\\sigma_i", "meaning": "Giá trị kỳ dị (SVD) = Độ dài các bán trục kéo giãn chính của ma trận (căn bậc hai trị riêng của $A^T A$)." }
+    ],
     "groups": [
       {
         "category": "Chuẩn & Tích vô hướng",
@@ -65,6 +75,15 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd02": {
     "title": "Bản rút gọn cực ngắn cho CĐ-02 (Giải tích & Tối ưu hóa), chỉ giữ đúng công thức tính nhanh & mẹo trắc nghiệm:",
+    "glossary": [
+      { "symbol": "\\nabla f", "meaning": "Gradient = Vector chỉ hướng dốc đứng tăng nhanh nhất của hàm số." },
+      { "symbol": "-\\nabla f", "meaning": "Âm Gradient = Hướng dốc xuống nhanh nhất (dùng trong Gradient Descent để giảm Loss)." },
+      { "symbol": "D_u f", "meaning": "Đạo hàm theo hướng $u$ = Tốc độ thay đổi khi đi theo một hướng la bàn bất kỳ." },
+      { "symbol": "H", "meaning": "Ma trận Hessian = Ma trận các đạo hàm riêng bậc 2 (đo độ cong võng lồi/lõm của hàm mất mát)." },
+      { "symbol": "\\eta", "meaning": "Learning rate (Tốc độ học) = Độ dài bước chân bước xuống dốc mỗi chu kỳ." },
+      { "symbol": "\\sigma(z)", "meaning": "Hàm Sigmoid = Nén toàn bộ trục số thực về khoảng xác suất $(0, 1)$." },
+      { "symbol": "p_i - y_i", "meaning": "Gradient của Softmax + Cross-Entropy = Sai số giữa xác suất mô hình dự đoán và nhãn thực tế." }
+    ],
     "groups": [
       {
         "category": "Đạo hàm & Gradient",
@@ -105,6 +124,14 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd03": {
     "title": "Bản rút gọn cực ngắn cho CĐ-03 (Xác suất & Biến ngẫu nhiên), mẹo khoanh trắc nghiệm 3 giây:",
+    "glossary": [
+      { "symbol": "P(A \\mid B)", "meaning": "Xác suất có điều kiện = Xác suất xảy ra $A$ khi biết chắc chắn $B$ đã xảy ra (mẫu số co lại thành $P(B)$)." },
+      { "symbol": "E[X]", "meaning": "Kỳ vọng (Expectation) = Giá trị trung bình kỳ vọng theo trọng số xác suất." },
+      { "symbol": "\\text{Var}(X)", "meaning": "Phương sai = Độ phân tán / khoảng dao động rung lắc quanh giá trị trung bình." },
+      { "symbol": "\\text{Cov}(X,Y)", "meaning": "Hiệp phương sai = Xu hướng biến thiên cùng chiều hay ngược chiều giữa $X$ và $Y$." },
+      { "symbol": "\\rho_{X,Y}", "meaning": "Hệ số tương quan = Hiệp phương sai đã chuẩn hóa về $[-1, 1]$ (không phụ thuộc thang đo đơn vị)." },
+      { "symbol": "P(B) \\text{ trong Bayes}", "meaning": "Xác suất toàn phần = Tổng xác suất xảy ra biến cố $B$ qua tất cả các kịch bản." }
+    ],
     "groups": [
       {
         "category": "Quy tắc Xác suất Cơ bản & Bayes",
@@ -140,6 +167,14 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd04": {
     "title": "Bản rút gọn cực ngắn cho CĐ-04 (Thống kê & Thử nghiệm A/B), mẹo nhẩm & ra quyết định:",
+    "glossary": [
+      { "symbol": "SE", "meaning": "Standard Error (Sai số chuẩn) = Độ phân tán của trung bình mẫu quanh trung bình quần thể thật ($SE = \\sigma / \\sqrt{n}$)." },
+      { "symbol": "p\\text{-value}", "meaning": "Mức độ ngạc nhiên = Xác suất nhận được kết quả dị biệt như vậy nếu giả thuyết vô hiệu $H_0$ là đúng." },
+      { "symbol": "\\alpha", "meaning": "Mức ý nghĩa = Ngưỡng chấp nhận sai lầm loại I (thường lấy 5% báo động giả)." },
+      { "symbol": "\\beta", "meaning": "Xác suất sai lầm loại II = Xác suất bỏ sót tác động thực tế (khi $H_0$ sai mà không nhận ra)." },
+      { "symbol": "1 - \\beta", "meaning": "Power (Sức mạnh kiểm định) = Khả năng phát hiện ra sự khác biệt khi nó thực sự tồn tại (thường nhắm $\\ge 80\\%$)." },
+      { "symbol": "\\text{SRM}", "meaning": "Sample Ratio Mismatch = Lệch tỉ lệ chia mẫu A/B (dấu hiệu dữ liệu thử nghiệm bị ô nhiễm/lọc sai)." }
+    ],
     "groups": [
       {
         "category": "Định lý CLT & Khoảng tin cậy",
@@ -174,6 +209,14 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd05": {
     "title": "Bản rút gọn cực ngắn cho CĐ-05 (Lập trình Python chuyên sâu & Quản lý bộ nhớ):",
+    "glossary": [
+      { "symbol": "\\text{id}(x)", "meaning": "Identity = Địa chỉ vùng nhớ thực của đối tượng trên RAM." },
+      { "symbol": "\\text{is vs } ==", "meaning": "`is` kiểm tra cùng trỏ một ô nhớ (`id`); `==` kiểm tra hai đối tượng có cùng giá trị." },
+      { "symbol": "\\text{Mutable}", "meaning": "Thay đổi tại chỗ được (list, dict, set); làm thay đổi ô nhớ gốc." },
+      { "symbol": "\\text{Immutable}", "meaning": "Bất biến không sửa được (int, str, tuple); chỉnh sửa sẽ sinh ra ô nhớ mới." },
+      { "symbol": "\\text{GIL}", "meaning": "Global Interpreter Lock = Khóa thông dịch viên, chỉ cho phép 1 luồng bytecode chạy tại một thời điểm." },
+      { "symbol": "\\text{LEGB}", "meaning": "Thứ tự tìm kiếm biến = Local $\\rightarrow$ Enclosing $\\rightarrow$ Global $\\rightarrow$ Built-in." }
+    ],
     "groups": [
       {
         "category": "Kiểu dữ liệu & Bản chất Vùng nhớ",
@@ -206,6 +249,12 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd06": {
     "title": "Bản rút gọn cực ngắn cho CĐ-06 (Xử lý dữ liệu với pandas), mẹo tránh bẫy code:",
+    "glossary": [
+      { "symbol": "\\text{df.loc}", "meaning": "Truy cập theo tên nhãn hàng/cột (bao gồm cả điểm mút kết thúc)." },
+      { "symbol": "\\text{df.iloc}", "meaning": "Truy cập theo vị trí số nguyên (loại trừ điểm mút kết thúc, kiểu slice chuẩn)." },
+      { "symbol": "\\text{SettingWithCopy}", "meaning": "Cảnh báo gán giá trị trên lát cắt tạm thời (Chained Indexing)." },
+      { "symbol": "\\text{Data Leakage}", "meaning": "Rò rỉ dữ liệu = Để thông tin tập Test lọt vào tập Train (như tính Mean trên toàn bộ tập)." }
+    ],
     "groups": [
       {
         "category": "Indexing & Slicing",
@@ -228,6 +277,13 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd07": {
     "title": "Bản rút gọn cực ngắn cho CĐ-07 (NumPy Broadcasting & Big-O Thuật toán):",
+    "glossary": [
+      { "symbol": "\\text{Broadcasting}", "meaning": "Cơ chế tự động nhân bản chiều kích thước bằng 1 để thực hiện phép tính ma trận không tốn thêm RAM." },
+      { "symbol": "\\text{View vs Copy}", "meaning": "View dùng chung bộ nhớ gốc (sửa là sửa gốc); Copy tạo bộ nhớ riêng biệt hoàn toàn." },
+      { "symbol": "O(1)", "meaning": "Thời gian hằng số (truy cập Hash map / Dict)." },
+      { "symbol": "O(\\log n)", "meaning": "Thời gian logarit (chia đôi không gian tìm kiếm nhị phân)." },
+      { "symbol": "O(n \\log n)", "meaning": "Thời gian sắp xếp tối ưu (MergeSort, Timsort)." }
+    ],
     "groups": [
       {
         "category": "NumPy Broadcasting & View/Copy",
@@ -251,6 +307,12 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd08": {
     "title": "Bản rút gọn cực ngắn cho CĐ-08 (SQL Analytics & Window Functions):",
+    "glossary": [
+      { "symbol": "\\text{WHERE vs HAVING}", "meaning": "`WHERE` lọc từng dòng bản ghi thô; `HAVING` lọc các nhóm sau khi chạy hàm tổng hợp." },
+      { "symbol": "\\text{OVER (PARTITION BY)}", "meaning": "Cắt bảng thành các cửa sổ con độc lập để tính toán mà không làm gộp co dòng lại như GROUP BY." },
+      { "symbol": "\\text{DENSE\\_RANK()}", "meaning": "Xếp hạng liên tục không nhảy cóc số thứ tự khi đồng hạng ($1, 2, 2, 3$)." },
+      { "symbol": "\\text{NULL}", "meaning": "Trạng thái không biết (Unknown); phép toán so sánh với NULL luôn cho kết quả Unknown." }
+    ],
     "groups": [
       {
         "category": "Thứ tự Thực thi SQL & Bẫy phổ biến",
@@ -275,6 +337,15 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd09": {
     "title": "Bản rút gọn cực ngắn cho CĐ-09 (Học máy toàn diện & Đánh giá mô hình):",
+    "glossary": [
+      { "symbol": "\\text{Precision}", "meaning": "Độ chuẩn xác = Báo dương tính có bao nhiêu ca đúng thật (mẫu số là dự đoán dương $TP+FP$)." },
+      { "symbol": "\\text{Recall}", "meaning": "Độ nhạy = Bắt trúng bao nhiêu ca thực tế đang có (mẫu số là thực tế dương $TP+FN$)." },
+      { "symbol": "F_1\\text{-Score}", "meaning": "Cân bằng điều hòa giữa Precision và Recall (bằng 0 nếu 1 trong 2 chỉ số sụp đổ)." },
+      { "symbol": "\\text{ROC-AUC}", "meaning": "Độ phân biệt giữa lớp dương và âm trên mọi ngưỡng (0.5 là đoán bừa, 1.0 là hoàn hảo)." },
+      { "symbol": "\\text{Bias}", "meaning": "Độ lệch = Giả định mô hình quá đơn giản, không học đủ mẫu (Underfitting)." },
+      { "symbol": "\\text{Variance}", "meaning": "Phương sai = Mô hình quá nhạy với nhiễu tập Train, không tổng quát hóa được (Overfitting)." },
+      { "symbol": "L_1\\text{ vs }L_2", "meaning": "$L_1$ (Lasso) ép trọng số về đúng bằng 0; $L_2$ (Ridge) ép trọng số co về gần 0." }
+    ],
     "groups": [
       {
         "category": "Confusion Matrix & Độ đo",
@@ -307,6 +378,12 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd10": {
     "title": "Bản rút gọn cực ngắn cho CĐ-10 (LLM, RAG & AI Agent thực chiến):",
+    "glossary": [
+      { "symbol": "\\text{Temperature}", "meaning": "Độ biến thiên nhiệt độ: 0 là trả lời chính xác máy móc; càng cao càng sáng tạo và dễ ảo giác." },
+      { "symbol": "\\text{Top-}p", "meaning": "Nucleus Sampling = Chỉ chọn từ trong nhóm có tổng xác suất tích lũy đạt ngưỡng $p$." },
+      { "symbol": "\\text{LoRA}", "meaning": "Low-Rank Adaptation = Đóng băng mô hình gốc, chỉ train 2 ma trận tích nhỏ hạng $r$ để tiết kiệm VRAM." },
+      { "symbol": "\\text{RAG}", "meaning": "Retrieval-Augmented Generation = Tìm tài liệu thực tế liên quan nhét vào ngữ cảnh prompt trước khi LLM sinh câu trả lời." }
+    ],
     "groups": [
       {
         "category": "Tham số sinh & Tokenization",
@@ -336,6 +413,12 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd11": {
     "title": "Bản rút gọn cực ngắn cho CĐ-11 (MLOps & Vận hành mô hình trong sản xuất):",
+    "glossary": [
+      { "symbol": "\\text{Data Drift}", "meaning": "Đầu vào $P(X)$ thay đổi phân phối theo thời gian nhưng quy luật quan hệ $P(Y|X)$ không đổi." },
+      { "symbol": "\\text{Concept Drift}", "meaning": "Bản chất hành vi $P(Y|X)$ thay đổi hoàn toàn (khiến mô hình cũ đoán sai nghiêm trọng)." },
+      { "symbol": "\\text{Canary}", "meaning": "Mở dần 5-10% người dùng thử phiên bản mới như chim hoàng yến dò khí độc trước khi mở 100%." },
+      { "symbol": "\\text{Shadow}", "meaning": "Chạy mô hình mới ngầm dưới nền với traffic thật để đo hiệu năng, không trả kết quả cho khách." }
+    ],
     "groups": [
       {
         "category": "Trôi dạt Dữ liệu & Khái niệm (Drift)",
@@ -358,6 +441,12 @@ window.QUICK_SUMMARY_DATA = {
 
   "cd12": {
     "title": "Bản rút gọn cực ngắn cho CĐ-12 (Logic hình thức, Đạo đức & Pháp lý AI):",
+    "glossary": [
+      { "symbol": "\\neg Q \\implies \\neg P", "meaning": "Mệnh đề phản đảo = Luôn có cùng giá trị chân lý với mệnh đề gốc $P \\implies Q$." },
+      { "symbol": "P \\land Q", "meaning": "Phép hội AND (chỉ đúng khi cả 2 cùng đúng)." },
+      { "symbol": "P \\lor Q", "meaning": "Phép tuyển OR (đúng khi ít nhất 1 mệnh đề đúng)." },
+      { "symbol": "\\text{De Morgan}", "meaning": "Phủ định của AND thành OR; phủ định của OR thành AND: $\\neg(P \\land Q) = \\neg P \\lor \\neg Q$." }
+    ],
     "groups": [
       {
         "category": "Logic Mệnh đề & Phản đảo",
@@ -381,6 +470,10 @@ window.QUICK_SUMMARY_DATA = {
 
   "tonghop": {
     "title": "Chiến thuật 90 phút & Mẹo phản xạ thi ĐGNL Tổng hợp (ĐGNL 01–06):",
+    "glossary": [
+      { "symbol": "90\\text{ phút} / 60\\text{ câu}", "meaning": "Trung bình 90 giây mỗi câu; 35 câu lý thuyết quét trong 30 phút, 60 phút còn lại cho tự luận & tính toán." },
+      { "symbol": "\\text{SFIA L3–L4}", "meaning": "Mức năng lực kỹ sư độc lập: Biết thiết kế giải pháp hệ thống và lường trước các rủi ro vận hành." }
+    ],
     "groups": [
       {
         "category": "Phân bổ thời gian chuẩn 90 phút",
